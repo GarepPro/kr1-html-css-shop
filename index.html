@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Учебный интернет-магазин</title>
+  <meta name="description" content="Учебный интернет-магазин ShopProject: каталог товаров, преимущества, популярные позиции и оформление заявки.">
+  <title>Учебный интернет-магазин - ShopProject</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
 </head>
@@ -21,16 +22,22 @@
             <a class="site-nav__link" href="catalog.html">Каталог</a>
           </li>
           <li class="site-nav__item">
+            <a class="site-nav__link" href="product.html">Карточка товара</a>
+          </li>
+          <li class="site-nav__item">
+            <a class="site-nav__link" href="order.html">Оформить заявку</a>
+          </li>
+          <li class="site-nav__item">
             <a class="site-nav__link" href="contacts.html">Контакты</a>
           </li>
           <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#advantages">Преимущества</a>
+            <a class="site-nav__link" href="#advantages">Преимущества</a>
           </li>
           <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#popular">Популярные товары</a>
+            <a class="site-nav__link" href="#popular">Популярные товары</a>
           </li>
           <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#contacts">Обратная связь</a>
+            <a class="site-nav__link" href="#faq">FAQ</a>
           </li>
         </ul>
       </nav>
@@ -39,23 +46,24 @@
 
   <main>
     <section class="hero">
-      <h1 class="hero__title">Учебный интернет-магазин</h1>
+      <h1 class="hero__title">Учебный интернет-магазин ShopProject</h1>
       <p class="hero__text">
-        Это стартовая страница учебного frontend-проекта.
-        В дальнейшем на её основе будет разработан многостраничный сайт
-        интернет-магазина или каталога услуг.
+        Многостраничный HTML/CSS-проект: каталог товаров, карточки с бейджами,
+        таблица характеристик, форма заявки и модальное окно.
       </p>
       <a class="button button--primary" href="#popular">Перейти к товарам</a>
+      <a class="button button--secondary" href="catalog.html">Открыть каталог</a>
     </section>
 
     <section class="section" id="advantages">
       <h2 class="section__title">Преимущества проекта</h2>
-
       <ul class="advantages-list">
-        <li class="advantages-list__item">понятная HTML-структура;</li>
-        <li class="advantages-list__item">семантические блоки страницы;</li>
-        <li class="advantages-list__item">подключение внешнего CSS-файла;</li>
-        <li class="advantages-list__item">подготовка к разработке многостраничного сайта.</li>
+        <li class="advantages-list__item">семантическая HTML-структура;</li>
+        <li class="advantages-list__item">единая БЭМ-система классов;</li>
+        <li class="advantages-list__item">CSS-переменные и состояния интерфейса;</li>
+        <li class="advantages-list__item">Flexbox-навигация и Grid-сетка карточек;</li>
+        <li class="advantages-list__item">позиционирование: relative, absolute, sticky, fixed;</li>
+        <li class="advantages-list__item">форма заявки с валидацией и модальное окно.</li>
       </ul>
     </section>
 
@@ -64,6 +72,7 @@
 
       <div class="products-grid">
         <article class="product-card product-card--featured">
+          <span class="product-card__badge product-card__badge--hit">Хит</span>
           <h3 class="product-card__title">Товар 1</h3>
           <p class="product-card__description">Краткое описание учебного товара.</p>
           <p class="product-card__price">Цена: 1000 руб.</p>
@@ -72,7 +81,8 @@
           </button>
         </article>
 
-        <article class="product-card">
+        <article class="product-card product-card--discount">
+          <span class="product-card__badge product-card__badge--sale">Скидка</span>
           <h3 class="product-card__title">Товар 2</h3>
           <p class="product-card__description">Краткое описание учебного товара.</p>
           <p class="product-card__price">Цена: 1500 руб.</p>
@@ -82,6 +92,7 @@
         </article>
 
         <article class="product-card">
+          <span class="product-card__badge product-card__badge--new">Новинка</span>
           <h3 class="product-card__title">Товар 3</h3>
           <p class="product-card__description">Краткое описание учебного товара.</p>
           <p class="product-card__price">Цена: 2000 руб.</p>
@@ -92,12 +103,39 @@
       </div>
     </section>
 
+    <section class="section" id="faq">
+      <h2 class="section__title">Часто задаваемые вопросы</h2>
+
+      <details class="faq-item">
+        <summary class="faq-item__question">Как оформить заявку на товар?</summary>
+        <p class="faq-item__answer">
+          Нажмите кнопку «Заказать» в карточке товара - откроется модальное окно,
+          где нужно заполнить имя, e-mail, телефон и выбрать тему заявки.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__question">Как работает форма заявки?</summary>
+        <p class="faq-item__answer">
+          Форма проверяет обязательные поля и корректность e-mail прямо в браузере.
+          После успешной отправки появляется сообщение об успехе.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-item__question">Можно ли оформить заказ со страницы заявки?</summary>
+        <p class="faq-item__answer">
+          Да, на странице <a href="order.html">«Оформить заявку»</a> расположена
+          отдельная форма, не привязанная к модальному окну.
+        </p>
+      </details>
+    </section>
+
     <aside class="aside-info">
       <h2 class="aside-info__title">Информация для студентов</h2>
       <p class="aside-info__text">
-        На следующих практических занятиях этот проект будет расширяться:
-        появятся формы, модальное окно, дополнительные страницы, Flex/Grid,
-        БЭМ-структура и адаптивная версия сайта.
+        Проект подготовлен к контрольной работе №1 по теме
+        «HTML и CSS: разработка многостраничного сайта».
       </p>
     </aside>
   </main>
@@ -108,6 +146,8 @@
       <p class="site-footer__text">Дисциплина: Фронтенд и бэкенд разработка</p>
     </div>
   </footer>
+
+  <button class="scroll-top" id="scroll-top" type="button" aria-label="Наверх">↑</button>
 
   <dialog class="order-dialog" id="order-dialog" aria-labelledby="order-dialog-title">
     <h2 class="order-dialog__title" id="order-dialog-title">Оформление заявки</h2>
@@ -125,8 +165,10 @@
           placeholder="Введите ваше имя"
           minlength="2"
           autocomplete="given-name"
+          aria-describedby="order-name-hint"
           required
         >
+        <small class="order-form__hint" id="order-name-hint">Минимум 2 символа.</small>
       </div>
 
       <div class="order-form__field">
@@ -152,19 +194,16 @@
           inputmode="tel"
           placeholder="+7 (900) 000-00-00"
           pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$"
+          autocomplete="tel"
+          aria-describedby="order-phone-hint"
           required
         >
-        <small class="order-form__hint">Формат: +7 (900) 000-00-00</small>
+        <small class="order-form__hint" id="order-phone-hint">Формат: +7 (900) 000-00-00</small>
       </div>
 
       <div class="order-form__field">
         <label class="order-form__label" for="order-date">Дата связи</label>
-        <input
-          class="order-form__input"
-          id="order-date"
-          name="date"
-          type="date"
-        >
+        <input class="order-form__input" id="order-date" name="date" type="date">
       </div>
 
       <div class="order-form__field">
@@ -208,7 +247,7 @@
     </form>
   </dialog>
 
-  <p class="success-message" id="success-message" hidden>
+  <p class="success-message" id="success-message" hidden role="status">
     Форма успешно отправлена!
   </p>
 </body>

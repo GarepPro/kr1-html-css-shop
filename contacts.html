@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Контактная информация учебного интернет-магазина.">
-  <title>Контакты — Учебный интернет-магазин</title>
+  <meta name="description" content="Контакты учебного интернет-магазина ShopProject: телефон, e-mail, адрес и форма обратной связи.">
+  <title>Контакты - ShopProject</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -14,24 +14,11 @@
 
       <nav class="site-nav" aria-label="Основная навигация">
         <ul class="site-nav__list">
-          <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html">Главная</a>
-          </li>
-          <li class="site-nav__item">
-            <a class="site-nav__link" href="catalog.html">Каталог</a>
-          </li>
-          <li class="site-nav__item">
-            <a class="site-nav__link site-nav__link--active" href="contacts.html">Контакты</a>
-          </li>
-          <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#advantages">Преимущества</a>
-          </li>
-          <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#popular">Популярные товары</a>
-          </li>
-          <li class="site-nav__item">
-            <a class="site-nav__link" href="index.html#contacts">Обратная связь</a>
-          </li>
+          <li class="site-nav__item"><a class="site-nav__link" href="index.html">Главная</a></li>
+          <li class="site-nav__item"><a class="site-nav__link" href="catalog.html">Каталог</a></li>
+          <li class="site-nav__item"><a class="site-nav__link" href="product.html">Карточка товара</a></li>
+          <li class="site-nav__item"><a class="site-nav__link" href="order.html">Оформить заявку</a></li>
+          <li class="site-nav__item"><a class="site-nav__link site-nav__link--active" href="contacts.html">Контакты</a></li>
         </ul>
       </nav>
     </div>
@@ -46,22 +33,78 @@
     <section class="section">
       <h1 class="section__title">Контакты</h1>
       <p class="section__text">
-        Здесь размещается контактная информация учебного интернет-магазина.
+        Свяжитесь с нами удобным способом или оставьте заявку через форму ниже.
       </p>
 
       <ul class="contacts-list">
-        <li class="contacts-list__item">Телефон: +7 (900) 000-00-00</li>
-        <li class="contacts-list__item">E-mail: info@example.com</li>
+        <li class="contacts-list__item">Телефон: <a href="tel:+79000000000">+7 (900) 000-00-00</a></li>
+        <li class="contacts-list__item">E-mail: <a href="mailto:info@example.com">info@example.com</a></li>
         <li class="contacts-list__item">Адрес: г. Москва, учебный проект</li>
+        <li class="contacts-list__item">Режим работы: пн–пт, 10:00–19:00</li>
       </ul>
     </section>
 
     <section class="section" id="feedback">
       <h2 class="section__title">Обратная связь</h2>
       <p class="section__text">
-        Для отправки заявки используйте форму в модальном окне на главной странице.
+        Заполните форму - мы свяжемся с вами в рабочее время.
       </p>
-      <a class="button button--primary" href="index.html#contacts">Перейти к форме</a>
+
+      <form class="order-form order-form--contacts" action="#" method="post" novalidate>
+        <div class="order-form__field">
+          <label class="order-form__label" for="contact-name">Имя *</label>
+          <input
+            class="order-form__input"
+            id="contact-name"
+            name="name"
+            type="text"
+            placeholder="Введите ваше имя"
+            minlength="2"
+            autocomplete="given-name"
+            required
+          >
+        </div>
+
+        <div class="order-form__field">
+          <label class="order-form__label" for="contact-email">E-mail *</label>
+          <input
+            class="order-form__input"
+            id="contact-email"
+            name="email"
+            type="email"
+            placeholder="example@mail.ru"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="order-form__field">
+          <label class="order-form__label" for="contact-message">Сообщение *</label>
+          <textarea
+            class="order-form__textarea"
+            id="contact-message"
+            name="message"
+            rows="5"
+            placeholder="Введите текст сообщения"
+            required
+          ></textarea>
+        </div>
+
+        <div class="order-form__field order-form__field--checkbox">
+          <label class="order-form__label">
+            <input class="order-form__input" id="contact-agreement" name="agreement" type="checkbox" required>
+            Я согласен на обработку данных *
+          </label>
+        </div>
+
+        <div class="order-form__actions">
+          <button class="button button--primary" type="submit">Отправить</button>
+        </div>
+      </form>
+
+      <p class="success-message" id="contact-success" hidden role="status">
+        Сообщение отправлено!
+      </p>
     </section>
   </main>
 
@@ -71,5 +114,33 @@
       <p class="site-footer__text">Дисциплина: Фронтенд и бэкенд разработка</p>
     </div>
   </footer>
+
+  <button class="scroll-top" id="scroll-top" type="button" aria-label="Наверх">↑</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.querySelector('.order-form--contacts');
+      const success = document.getElementById('contact-success');
+      if (!form || !success) return;
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        Array.from(form.elements).forEach((el) => {
+          if (el.willValidate) el.removeAttribute('aria-invalid');
+        });
+        if (!form.checkValidity()) {
+          Array.from(form.elements).forEach((el) => {
+            if (el.willValidate && !el.checkValidity()) {
+              el.setAttribute('aria-invalid', 'true');
+            }
+          });
+          form.reportValidity();
+          return;
+        }
+        success.hidden = false;
+        form.reset();
+      });
+    });
+  </script>
 </body>
 </html>

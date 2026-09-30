@@ -1,74 +1,75 @@
-// Получаем модальное окно по id. 
-const orderDialog = document.getElementById('order-dialog'); 
+// ============================================================
+// 1. Модальное окно заявки (модалка на index.html)
+// ============================================================
+const orderDialog = document.getElementById('order-dialog');
+const orderButtons = document.querySelectorAll('.product-card__button');
+const closeDialogButton = document.getElementById('close-order-dialog');
+const selectedProductInput = document.getElementById('selected-product');
 
-// Получаем все кнопки заказа в карточках товаров. 
-const orderButtons = document.querySelectorAll('.product-card__button'); 
+if (orderDialog && orderButtons.length && closeDialogButton && selectedProductInput) {
+  orderButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const productName = button.dataset.product || 'Не указан';
+      selectedProductInput.value = productName;
+      orderDialog.showModal();
+    });
+  });
 
-// Получаем кнопку закрытия модального окна. 
-const closeDialogButton = document.getElementById('close-order-dialog'); 
+  closeDialogButton.addEventListener('click', () => {
+    orderDialog.close();
+  });
+}
 
-// Получаем скрытое поле, в которое будет записан выбранный товар. 
-const selectedProductInput = document.getElementById('selected-product'); 
+// ============================================================
+// 2. Валидация формы в модальном окне
+// ============================================================
+const orderForm = document.getElementById('order-form');
+const successMessage = document.getElementById('success-message');
 
-// Перебираем все кнопки «Заказать». 
-orderButtons.forEach((button) => { 
-  button.addEventListener('click', () => { 
-    // Получаем название товара из data-атрибута. 
-    const productName = button.dataset.product; 
+if (orderForm && successMessage && orderDialog) {
+  orderForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-    // Записываем название товара в скрытое поле формы. 
-    selectedProductInput.value = productName; 
+    const formElements = Array.from(orderForm.elements);
 
-    // Открываем модальное окно. 
-    orderDialog.showModal(); 
-  }); 
-}); 
+    formElements.forEach((element) => {
+      if (element.willValidate) element.removeAttribute('aria-invalid');
+    });
 
-// Закрываем модальное окно по кнопке «Закрыть». 
-closeDialogButton.addEventListener('click', () => { 
-  orderDialog.close(); 
-});
+    if (!orderForm.checkValidity()) {
+      formElements.forEach((element) => {
+        if (element.willValidate && !element.checkValidity()) {
+          element.setAttribute('aria-invalid', 'true');
+        }
+      });
+      orderForm.reportValidity();
+      return;
+    }
 
-// Получаем форму заявки. 
-const orderForm = document.getElementById('order-form'); 
+    successMessage.hidden = false;
+    orderForm.reset();
+    orderDialog.close();
+  });
+}
 
-// Получаем сообщение об успешной отправке. 
-const successMessage = document.getElementById('success-message'); 
+// ============================================================
+// 3. Кнопка «Наверх» (position: fixed)
+// ============================================================
+const scrollTopButton = document.getElementById('scroll-top');
 
-// Обрабатываем отправку формы. 
-orderForm.addEventListener('submit', (event) => { 
-  // Отменяем стандартную отправку формы, 
-  // потому что backend пока не подключён. 
-  event.preventDefault(); 
+if (scrollTopButton) {
+  const toggleScrollTop = () => {
+    if (window.scrollY > 300) {
+      scrollTopButton.classList.add('scroll-top--visible');
+    } else {
+      scrollTopButton.classList.remove('scroll-top--visible');
+    }
+  };
 
-  // Сбрасываем предыдущие признаки ошибок. 
-  const formElements = Array.from(orderForm.elements); 
+  window.addEventListener('scroll', toggleScrollTop, { passive: true });
+  toggleScrollTop();
 
-  formElements.forEach((element) => { 
-    if (element.willValidate) { 
-      element.removeAttribute('aria-invalid'); 
-    } 
-  }); 
-
-  // Проверяем встроенные HTML-ограничения формы. 
-  if (!orderForm.checkValidity()) { 
-    formElements.forEach((element) => { 
-      if (element.willValidate && !element.checkValidity()) { 
-        element.setAttribute('aria-invalid', 'true'); 
-      } 
-    }); 
-
-    // Показываем стандартные сообщения браузера. 
-    orderForm.reportValidity(); 
-    return; 
-  } 
-
-  // Показываем сообщение об успешной отправке. 
-  successMessage.hidden = false; 
-
-  // Очищаем форму. 
-  orderForm.reset(); 
-
-  // Закрываем модальное окно. 
-  orderDialog.close(); 
-}); 
+  scrollTopButton.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
