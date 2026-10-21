@@ -102,7 +102,7 @@ a:focus-visible {
    4. Блок site-header (sticky)
    =============================== */
 .site-header {
-  position: sticky;   /* ← требование: sticky */
+  position: sticky;
   top: 0;
   z-index: var(--z-header);
   background-color: var(--color-surface);
@@ -195,7 +195,7 @@ a:focus-visible {
    10. Блок product-card + бейджи
    =============================== */
 .product-card {
-  position: relative;   /* ← требование: relative для absolute-бейджа */
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
@@ -213,10 +213,10 @@ a:focus-visible {
 .product-card--discount { border-color: var(--color-danger); }
 
 .product-card__badge {
-  position: absolute;   /* ← требование: absolute */
+  position: absolute;
   top: var(--space-sm);
   right: var(--space-sm);
-  z-index: var(--z-badge);   /* ← требование: z-index */
+  z-index: var(--z-badge);
   padding: 4px 8px;
   font-size: 12px;
   font-weight: 700;
@@ -283,12 +283,12 @@ a:focus-visible {
 }
 
 /* ===============================
-   14. Блок catalog-filters (sticky)
+   14. Блок catalog-filters
    =============================== */
 .catalog-filters {
   grid-area: filters;
   align-self: start;
-  position: sticky;   /* ← требование: sticky-сайдбар */
+  position: sticky;
   top: calc(var(--space-xl) + 60px);
   padding: var(--space-md);
   border: 1px solid var(--color-border);
@@ -535,9 +535,7 @@ a:focus-visible {
   outline-offset: 3px;
 }
 
-/* Модификатор формы для страницы (не в модалке) */
-.order-form--page,
-.order-form--contacts {
+.order-form--page {
   max-width: 640px;
 }
 
@@ -573,7 +571,7 @@ a:focus-visible {
    26. Блок scroll-top (fixed)
    =============================== */
 .scroll-top {
-  position: fixed;   /* ← требование: fixed */
+  position: fixed;
   right: var(--space-lg);
   bottom: var(--space-lg);
   z-index: var(--z-scroll-top);
@@ -600,20 +598,3 @@ a:focus-visible {
   outline-offset: 3px;
 }
 .scroll-top--visible { display: flex; }
-
-/* ===============================
-   27. Адаптив (базовый, для проверки)
-   =============================== */
-@media (max-width: 900px) {
-  .products-grid { grid-template-columns: repeat(2, 1fr); }
-  .catalog-layout {
-    grid-template-columns: 1fr;
-    grid-template-areas: "filters" "products";
-  }
-  .catalog-filters { position: static; }
-  .product-detail { grid-template-columns: 1fr; }
-  .reviews-list { grid-template-columns: 1fr; }
-}
-@media (max-width: 600px) {
-  .products-grid { grid-template-columns: 1fr; }
-}
