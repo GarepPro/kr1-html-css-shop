@@ -90,16 +90,31 @@ npm run check          # все проверки подряд
 
 ## Публикация на GitHub Pages
 
-Сайт открывается из подкаталога репозитория, поэтому путь передаётся через `VITE_APP_BASE`
-(см. `.env.example`):
+Деплой автоматический: `.github/workflows/deploy.yml` собирает проект и публикует `dist/`
+при каждом пуше в `main` (или вручную — Actions → Deploy to GitHub Pages → Run workflow).
+Сайт: https://gareppro.github.io/kr1-html-css-shop/
+
+Разовая настройка репозитория: **Settings → Pages → Source: GitHub Actions**.
+
+Сборка в workflow запускается с `VITE_APP_BASE=/kr1-html-css-shop/` — это basename для
+React Router (см. `.env.example`), потому что сайт открывается из подкаталога. После сборки
+`scripts/postbuild.mjs` добавляет в `dist/`:
+
+- `404.html` — копия `index.html`: GitHub Pages статический, и прямой переход на
+  `/kr1-html-css-shop/catalog` без такого файла вернул бы 404. Pages отдаёт `404.html`
+  для неизвестных путей, а маршрут отрисовывает React Router;
+- `.nojekyll` — отключает обработку Jekyll на Pages.
+
+Локальная сборка под Pages (проверка перед пушем):
 
 ```powershell
 $env:VITE_APP_BASE='/kr1-html-css-shop/'
 npm run build
+npm run preview   # http://localhost:4173/kr1-html-css-shop/
 ```
 
-Содержимое `dist/` публикуется на GitHub Pages. Для прямых переходов по адресам вида
-`/catalog` нужна страница `404.html` (копия `index.html`) — стандартный приём для SPA.
+Обычная `npm run build` без переменной даёт сборку с `basename: '/'` — она подходит
+для локального просмотра из `dist/` и для хостинга в корне домена (не для Pages).
 
 ## Особенности реализации
 
