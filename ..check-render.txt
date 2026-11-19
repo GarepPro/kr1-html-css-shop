@@ -1,0 +1,12 @@
+
+[43m[30m WARN [39m[49m [36minlineDynamicImports[39m option is ignored because [36mcodeSplitting: false[39m is set.
+
+/ -> OK; h1: "Вещи для ясной мысли и спокойной работы"
+/catalog -> OK; h1: "Каталог товаров"
+/product/aurora-desk-lamp -> OK; h1: "Лампа Aurora Desk"
+/about -> OK; h1: "Мы делаем вещи, которыми пользуемся сами"
+/order -> OK; h1: "Оформление заявки"
+/contacts -> OK; h1: "Контакты"
+/account -> OK; h1: "Александра Смирнова"
+/nope -> OK; h1: "Страница не найдена"
+ИТОГ: все страницы отрисованы без ошибок

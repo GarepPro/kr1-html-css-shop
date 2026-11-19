@@ -1,0 +1,27 @@
+{
+  "name": "kr1-html-css-shop",
+  "private": true,
+  "version": "2.0.0",
+  "description": "ShopProject: интернет-магазин предметов для рабочего места. React + Vite, без UI-фреймворков",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check:routes": "node scripts/smoke-check.mjs",
+    "check:render": "node scripts/render-check.mjs",
+    "check:classes": "node scripts/class-check.mjs",
+    "check": "npm run check:render && npm run check:classes && npm run check:routes"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.6"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.3.0",
+    "jsdom": "^29.1.1",
+    "vite": "^8.3.8"
+  }
+}
+

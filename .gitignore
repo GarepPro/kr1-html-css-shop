@@ -6,3 +6,10 @@ Thumbs.db
 *.temp
 .env
 .env.*
+!.env.example
+
+
+# Node / React (Vite)
+node_modules/
+dist/
+.render-check/

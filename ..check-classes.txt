@@ -1,0 +1,2 @@
+Классов в JSX: 455
+Без стилей (2): all, icon-button--badge
