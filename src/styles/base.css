@@ -659,6 +659,34 @@ button {
   color: var(--color-muted);
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    transition: opacity var(--duration-lg) var(--ease-out),
+      transform var(--duration-lg) var(--ease-out);
+  }
+
+  .reveal[data-reveal-pending]:not(:focus-within) {
+    opacity: 0;
+    transform: translateY(var(--space-md));
+  }
+
+  :is(.category-grid, .products-grid) > .reveal:nth-child(4n + 2) {
+    transition-delay: 45ms;
+  }
+
+  :is(.category-grid, .products-grid) > .reveal:nth-child(4n + 3) {
+    transition-delay: 90ms;
+  }
+
+  :is(.category-grid, .products-grid) > .reveal:nth-child(4n) {
+    transition-delay: 135ms;
+  }
+
+  .reveal:focus-within {
+    transition: none;
+  }
+}
+
 @keyframes toast-in {
   from {
     opacity: 0;

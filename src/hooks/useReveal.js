@@ -92,19 +92,11 @@ export function useMediaQuery(query) {
 // Анимированный счётчик (аналог js/counters.js): плавно «докручивает» число,
 // когда элемент появляется на экране.
 export function useCountUp(target, { duration = 1400, decimals = 0, enabled = true } = {}) {
-  const [value, setValue] = useState(enabled ? 0 : target);
+  const [value, setValue] = useState(0);
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
 
   useEffect(() => {
-    if (!enabled) {
-      setValue(target);
-      return undefined;
-    }
-
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      setValue(target);
-      return undefined;
-    }
+    if (!enabled || reducedMotion) return undefined;
 
     let frame = 0;
     const start = performance.now();
@@ -124,9 +116,9 @@ export function useCountUp(target, { duration = 1400, decimals = 0, enabled = tr
 
     frame = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frame);
-  }, [target, duration, decimals, enabled]);
+  }, [target, duration, decimals, enabled, reducedMotion]);
 
-  return value;
+  return reducedMotion ? target : value;
 }
 
 // Форматирование числа для счётчиков: 12400 → «12 400», 4.8 → «4,8».

@@ -540,10 +540,6 @@ export function getProductStatus({ stock }) {
   return isAvailable ? 'В наличии' : 'Нет в наличии';
 }
 
-export function createProductSummary(product) {
-  return `${product.title} — ${formatPrice(product.price)}. ${getProductStatus(product)}.`;
-}
-
 // Название категории по slug.
 export function getCategoryLabel(slug) {
   return CATEGORIES.find((category) => category.slug === slug)?.label ?? '';

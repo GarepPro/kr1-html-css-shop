@@ -13,6 +13,7 @@ Thumbs.db
 node_modules/
 dist/
 .render-check/
+/src/generated/practice-15/
 
 # Local review artifacts and image drafts
 /.hallmark/
