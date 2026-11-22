@@ -1,25 +1,18 @@
 // Данные главной страницы: hero, статистика, преимущества, шаги, отзывы, FAQ.
-import { CATALOG_PRODUCTS, CATEGORIES, getProductById } from './catalog.js';
+import { CATALOG_PRODUCTS, CATEGORIES } from './catalog.js';
 
 // Реэкспорт бейджей — часть страниц и компонентов импортирует их отсюда.
 export { BADGES } from './catalog.js';
 
-export const HERO = {
-  eyebrow: 'Новая коллекция — осень 2026',
-  title: 'Вещи для ясной мысли и спокойной работы',
-  text: 'Шведский подход к рабочему месту: продуманные лампы, клавиатуры, блокноты и аудио. Только то, чем пользуемся каждый день сами.',
-  primaryAction: { to: '/catalog', label: 'Смотреть каталог' },
-  secondaryAction: { to: '/about', label: 'О бренде' },
-  // Чипы под кнопками — быстрые ссылки на категории.
-  chips: ['light', 'desk', 'audio', 'print'],
-};
+// Минимальная сумма заказа, с которой доставка бесплатна.
+export const FREE_DELIVERY_FROM = 3000;
+export const DELIVERY_PRICE = 390;
 
-// Счётчики hero-блока (анимируются при появлении).
-export const HERO_STATS = [
-  { value: 12400, suffix: '+', label: 'клиентов' },
-  { value: 4.8, decimals: 1, label: 'средняя оценка' },
-  { value: 2, suffix: ' дня', label: 'средняя доставка' },
-];
+export const HERO = {
+  title: 'Предметы для рабочего стола',
+  text: 'Лампы, блокноты и техника для рабочего места.',
+  primaryAction: { to: '/catalog', label: 'Открыть каталог' },
+};
 
 export const ADVANTAGES = [
   {
@@ -47,35 +40,41 @@ export const ADVANTAGES = [
 // Короткие шаги «как это работает» на главной.
 export const STEPS = [
   {
-    step: '01',
+    step: '1',
     title: 'Подберите вещь',
     text: 'Фильтры по цене, категории и рейтингу помогают найти нужное за пару минут.',
   },
   {
-    step: '02',
-    title: 'Оформите заявку',
-    text: 'Менеджер подтвердит наличие и предложит удобное время доставки.',
+    step: '2',
+    title: 'Проверьте корзину',
+    text: 'В корзине видны количество товаров, стоимость доставки и итог.',
   },
   {
-    step: '03',
+    step: '3',
     title: 'Получите и проверьте',
     text: 'На тест 60 дней: если что-то не так — вернём деньги или заменим товар.',
   },
 ];
 
 // Категории-плитки на главной собираются из общего каталога.
+const CATEGORY_COVERS = {
+  desk: 'keyboard-slim',
+  focus: 'focus-timer',
+  light: 'aurora-desk-lamp',
+  audio: 'headphones-echo',
+  print: 'book-typography',
+  accessories: 'pen-roll',
+};
+
 export const HOME_CATEGORIES = CATEGORIES.map((category) => ({
   ...category,
-  count: CATALOG_PRODUCTS.filter((product) => product.category === category.slug).length,
+  cover: CATEGORY_COVERS[category.slug],
 }));
 
-// Популярные товары главной — семь лучших по популярности.
+// Популярные товары главной — верхушка каталога по популярности.
 export const POPULAR_PRODUCTS = [...CATALOG_PRODUCTS]
   .sort((a, b) => b.popularity - a.popularity)
-  .slice(0, 6);
-
-// Товар для блока «Выбор редакции».
-export const EDITOR_PICK = getProductById('keyboard-slim');
+  .slice(0, Math.min(6, CATALOG_PRODUCTS.length));
 
 // Отзывы на главной (отдельные от отзывов карточки товара).
 export const HOME_REVIEWS = [
@@ -112,17 +111,17 @@ export const HOME_REVIEWS = [
 // Частые вопросы. Ответ — массив строк и ссылок: { link: { to, label } }.
 export const FAQ = [
   {
-    question: 'Сколько стоит идёт доставка?',
+    question: 'Сколько стоит доставка?',
     answer: [
       'По Москве доставка бесплатна при заказе от 3 000 ₽, по России — от 5 000 ₽. ',
-      'Точную стоимость менеджер назовёт при подтверждении заявки.',
+      'Уточнить стоимость можно по телефону магазина.',
     ],
   },
   {
     question: 'Можно ли вернуть товар, если он не подошёл?',
     answer: [
-      'Да, на возврат есть 60 дней. Достаточно заявки на странице ',
-      { link: { to: '/order', label: 'оформления' } },
+      'Да, на возврат есть 60 дней. Достаточно заявки в ',
+      { link: { to: '/cart', label: 'корзине' } },
       ' — курьер заберёт товар и мы вернём деньги в течение 3 дней.',
     ],
   },
@@ -143,18 +142,19 @@ export const FAQ = [
     ],
   },
   {
-    question: 'Можно ли забрать заказ со склада?',
+    question: 'Где забрать заказ самостоятельно?',
     answer: [
-      'Да, самовывоз доступен с 10:00 до 20:00 по адресу: Москва, Большая Новодмитровская, 36. ',
-      'Заказ собирается в течение 2 часов.',
+      'В московском шоуруме или в пунктах выдачи в Химках и Мытищах. ',
+      { link: { to: '/contacts#showroom', label: 'Адреса' } },
+      ' и часы работы указаны на карте.',
     ],
   },
 ];
 
 // Блок-призыв в конце главной.
 export const CTA = {
-  title: 'Соберите своё рабочее место',
-  text: 'Подборка из лампы, клавиатуры и блокнота — со скидкой 10% при заказе комплектом.',
-  action: { to: '/catalog', label: 'Выбрать комплект' },
+  title: 'Шоурум в Москве',
+  text: 'Московский шоурум на Большой Новодмитровской открыт каждый день с 10:00 до 21:00.',
+  action: { to: '/contacts#showroom', label: 'Адрес и карта' },
 };
 

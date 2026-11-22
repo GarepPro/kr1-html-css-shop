@@ -2,9 +2,7 @@
 // Pages — статический хостинг: адрес вида /kr1-html-css-shop/catalog ищет файл
 // catalog/index.html и без него отдаёт 404. Копируем index.html в 404.html —
 // Pages отдаст его для любого неизвестного пути, и React Router отрисует нужную
-// страницу по basename (VITE_APP_BASE). Относительные пути в index.html
-// (base: './' в vite.config.js) внутри 404.html разрешаются от корня сайта,
-// то есть указывают на /kr1-html-css-shop/assets/... — верно для любой глубины.
+// страницу по basename. Vite записывает пути к ресурсам от базы сайта.
 import { copyFileSync, existsSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 

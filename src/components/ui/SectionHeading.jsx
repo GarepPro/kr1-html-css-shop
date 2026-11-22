@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
-import Icon from './Icon.jsx';
 import { Reveal } from './Reveal.jsx';
 
-// Заголовок раздела: надзаголовок (eyebrow), h2 с нужным уровнем, описание и ссылка «все».
+// Заголовок раздела с описанием и ссылкой на полный список.
 export function SectionHeading({
-  eyebrow,
   title,
   text,
   link,
@@ -17,7 +15,6 @@ export function SectionHeading({
 
   return (
     <Reveal className={`section-heading section-heading--${align} ${className}`.trim()}>
-      {eyebrow && <span className="section-heading__eyebrow">{eyebrow}</span>}
       <Heading className="section-heading__title" id={id}>
         {title}
       </Heading>
@@ -25,7 +22,6 @@ export function SectionHeading({
       {link && (
         <Link className="section-heading__link" to={link.to}>
           {link.label}
-          <Icon name="arrowRight" size={18} />
         </Link>
       )}
     </Reveal>

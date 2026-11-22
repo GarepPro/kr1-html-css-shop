@@ -94,15 +94,13 @@ function CatalogPage() {
 
       <section className="page-hero">
         <Reveal className="page-hero__content">
-          <span className="page-hero__eyebrow">{CATALOG_PRODUCTS.length} товаров в наличии</span>
           <h1 className="page-hero__title">{title}</h1>
           <p className="page-hero__text">
-            Проверенные предметы для рабочего места: лампы, клавиатуры, блокноты и аудио.
-            Фильтруйте по цене и наличию, сравнивайте рейтинги.
+            Лампы, клавиатуры, блокноты и другие предметы для рабочего места.
           </p>
         </Reveal>
 
-        <Reveal className="page-hero__aside" delay={100}>
+        <Reveal className="page-hero__aside">
           <span className="page-hero__aside-icon">
             <Icon name="truck" size={22} />
           </span>
@@ -113,7 +111,7 @@ function CatalogPage() {
         </Reveal>
       </section>
 
-      <section className="catalog-layout" aria-label="Список товаров">
+      <section className="catalog-layout" aria-labelledby="catalog-products-title">
         <aside className={filtersOpen ? 'catalog-filters catalog-filters--open' : 'catalog-filters'}>
           <div className="catalog-filters__head">
             <h2 className="catalog-filters__title">
@@ -201,7 +199,7 @@ function CatalogPage() {
                 onChange={(event) => setPriceFrom(event.target.value)}
               />
               <span className="filter-range__dash" aria-hidden="true">
-                —
+                до
               </span>
               <input
                 className="field__input"
@@ -261,6 +259,7 @@ function CatalogPage() {
         </aside>
 
         <div className="catalog-products">
+          <h2 className="visually-hidden" id="catalog-products-title">Список товаров</h2>
           <div className="catalog-toolbar">
             <p className="catalog-toolbar__count">
               Найдено <strong>{visibleProducts.length}</strong> из {CATALOG_PRODUCTS.length}
@@ -296,9 +295,9 @@ function CatalogPage() {
 
           {visibleProducts.length > 0 ? (
             <div className="products-grid products-grid--catalog">
-              {visibleProducts.map((product, index) => (
-                <Reveal key={product.id} delay={index * 50}>
-                  <ProductCard product={product} index={index} />
+              {visibleProducts.map((product) => (
+                <Reveal key={product.id}>
+                  <ProductCard product={product} />
                 </Reveal>
               ))}
             </div>
@@ -309,8 +308,7 @@ function CatalogPage() {
               </span>
               <h2 className="empty-state__title">По фильтрам ничего не найдено</h2>
               <p className="empty-state__text">
-                Попробуйте расширить диапазон цены или сбросить фильтры — либо напишите
-                консультанту в чат, поможем подобрать.
+                Измените диапазон цен, сбросьте фильтры или напишите в чат.
               </p>
               <button className="button button--primary" type="button" onClick={resetFilters}>
                 Сбросить фильтры
@@ -325,7 +323,7 @@ function CatalogPage() {
           <div className="trust-strip__item">
             <Icon name="truck" size={22} />
             <span className="trust-strip__body">
-              <strong>Доставка 1–2 дня</strong>
+              <strong>Доставка за один-два дня</strong>
               <span>по Москве и области</span>
             </span>
           </div>

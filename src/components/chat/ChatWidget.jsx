@@ -8,7 +8,7 @@ import {
   getChatScenario,
 } from '../../data/search.js';
 
-// Чат с консультантом: кнопка в правом нижнем углу и панель переписки.
+// Чат магазина: кнопка в правом нижнем углу и панель переписки.
 // Ответы подбираются по ключевым словам (data/search.js) с имитацией набора текста.
 let messageId = 0;
 const createMessage = (from, text, action = null) => ({
@@ -18,8 +18,7 @@ const createMessage = (from, text, action = null) => ({
   action,
 });
 
-export function ChatWidget() {
-  const [open, setOpen] = useState(false);
+export function ChatWidget({ open, setOpen }) {
   const [messages, setMessages] = useState(() => [createMessage('bot', CHAT_GREETING.text)]);
   const [draft, setDraft] = useState('');
   const [typing, setTyping] = useState(false);
@@ -85,16 +84,9 @@ export function ChatWidget() {
   return (
     <div className={`chat${open ? ' chat--open' : ''}`}>
       {open && (
-        <section className="chat__panel" aria-label="Чат с консультантом">
+        <section className="chat__panel" aria-label="Чат магазина">
           <header className="chat__header">
-            <span className="chat__avatar" aria-hidden="true">
-              М
-              <span className="chat__status" />
-            </span>
-            <span className="chat__identity">
-              <strong className="chat__name">Мила, консультант</strong>
-              <span className="chat__presence">Онлайн · отвечаем за минуту</span>
-            </span>
+            <strong className="chat__name">Помощник магазина</strong>
             <button
               className="chat__icon-button"
               type="button"
@@ -105,7 +97,7 @@ export function ChatWidget() {
             </button>
           </header>
 
-          <div className="chat__messages" ref={listRef} role="log" aria-live="polite">
+          <div className="chat__messages" ref={listRef} role="log">
             {messages.map((message) => (
               <div className={`chat__message chat__message--${message.from}`} key={message.id}>
                 <div className="chat__bubble">
@@ -117,7 +109,6 @@ export function ChatWidget() {
                       onClick={() => setOpen(false)}
                     >
                       {message.action.label}
-                      <Icon name="arrowRight" size={14} />
                     </Link>
                   )}
                 </div>
@@ -126,7 +117,8 @@ export function ChatWidget() {
 
             {typing && (
               <div className="chat__message chat__message--bot">
-                <div className="chat__bubble chat__bubble--typing" aria-label="Консультант печатает">
+                <span className="visually-hidden">Готовится ответ</span>
+                <div className="chat__bubble chat__bubble--typing" aria-hidden="true">
                   <span />
                   <span />
                   <span />
@@ -179,10 +171,10 @@ export function ChatWidget() {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
-        aria-label={open ? 'Свернуть чат' : 'Чат с консультантом'}
+        aria-label={open ? 'Свернуть чат' : 'Чат магазина'}
       >
         <Icon name={open ? 'close' : 'chat'} size={22} />
-        {!open && <span className="chat__toggle-label">Чат с консультантом</span>}
+        {!open && <span className="chat__toggle-label">Чат магазина</span>}
         {!open && unread > 0 && <span className="chat__badge">{unread}</span>}
       </button>
     </div>

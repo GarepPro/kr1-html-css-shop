@@ -22,12 +22,21 @@ for (const match of jsxSource.matchAll(/className="([^"]+)"/g)) {
   match[1].split(/\s+/).forEach((name) => name && used.add(name));
 }
 
-// Шаблонные className={`a b--${x}`} и className={cond ? 'a' : 'b'}
+// Шаблонные className={`a b--${x}`} и className={cond ? 'a' : 'b'}.
+// Строки, похожие на CSS-класс: с дефисом (БЭМ-модификатор), подчёркиванием
+// или ровно одна из известных БЭМ-основ — иначе значение сравнения вроде 'all'
+// принималось бы за класс.
+const looksLikeClass = (name) =>
+  ['-', '_'].some((symbol) => name.includes(symbol)) ||
+  /^(button|badge|field|filter|cart|order|product|hero|site|account|chat|search|counter|toast|quantity|rating|review|faq|step|timeline|contact|showroom|team|story|about|timeline|section|page|modal|icon|reveal)$/.test(
+    name,
+  );
+
 for (const match of jsxSource.matchAll(/className=\{([^}]+)\}/g)) {
   for (const literal of match[1].matchAll(/'([^']+)'|`([^`]+)`/g)) {
     const value = (literal[1] ?? literal[2]).replace(/\$\{[^}]*\}/g, ' ');
     value.split(/\s+/).forEach((name) => {
-      if (name && /^[a-z]/.test(name)) used.add(name);
+      if (name && /^[a-z]/.test(name) && looksLikeClass(name)) used.add(name);
     });
   }
 }

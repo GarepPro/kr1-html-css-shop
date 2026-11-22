@@ -5,6 +5,7 @@ import SearchDialog from '../search/SearchDialog.jsx';
 import { ScrollProgress } from './ScrollProgress.jsx';
 import { useTheme } from '../../context/ThemeContext.jsx';
 import { useFavorites } from '../../context/FavoritesContext.jsx';
+import { useCart } from '../../context/CartContext.jsx';
 import { useScrollState } from '../../hooks/useReveal.js';
 import { hotkeys, useHotkey, useScrollLock } from '../../hooks/useHotkey.js';
 
@@ -13,7 +14,6 @@ export const PAGES = [
   { to: '/', label: 'Главная', end: true },
   { to: '/catalog', label: 'Каталог' },
   { to: '/about', label: 'О бренде' },
-  { to: '/order', label: 'Заявка' },
   { to: '/contacts', label: 'Контакты' },
 ];
 
@@ -26,6 +26,7 @@ function SiteHeader() {
   const { y } = useScrollState();
   const { resolved, toggleTheme } = useTheme();
   const { count } = useFavorites();
+  const { count: cartCount } = useCart();
   const location = useLocation();
 
   // Ctrl/Cmd+K открывает поиск на любой странице.
@@ -93,13 +94,23 @@ function SiteHeader() {
             </button>
 
             <Link
-              className="icon-button icon-button--badge"
+              className="icon-button"
               to="/account#favorites"
               aria-label={`Избранное: ${count}`}
               title="Избранное"
             >
               <Icon name="heart" size={19} />
               {count > 0 && <span className="icon-button__badge">{count}</span>}
+            </Link>
+
+            <Link
+              className="site-header__cart"
+              to="/cart"
+              aria-label={`Корзина: ${cartCount}`}
+              title="Корзина"
+            >
+              <Icon name="cart" size={19} />
+              {cartCount > 0 && <span className="icon-button__badge">{cartCount}</span>}
             </Link>
 
             <NavLink
@@ -142,14 +153,17 @@ function SiteHeader() {
               <li key={page.to}>
                 <NavLink className={navLinkClass} end={page.end} to={page.to}>
                   {page.label}
-                  <Icon name="arrowRight" size={18} />
                 </NavLink>
               </li>
             ))}
             <li>
+              <NavLink className={navLinkClass} to="/cart">
+                Корзина{cartCount > 0 ? ` (${cartCount})` : ''}
+              </NavLink>
+            </li>
+            <li>
               <NavLink className={navLinkClass} to="/account">
                 Личный кабинет
-                <Icon name="arrowRight" size={18} />
               </NavLink>
             </li>
           </ul>

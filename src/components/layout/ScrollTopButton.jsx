@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Icon from '../ui/Icon.jsx';
 
 // Кнопка «Наверх» (position: fixed): появляется после прокрутки на 600px.
 function ScrollTopButton() {
@@ -19,7 +18,8 @@ function ScrollTopButton() {
   }, []);
 
   const handleClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduced ? 'instant' : 'smooth' });
   };
 
   return (
@@ -27,10 +27,10 @@ function ScrollTopButton() {
       className={isVisible ? 'scroll-top scroll-top--visible' : 'scroll-top'}
       type="button"
       aria-label="Наверх"
-      tabIndex={isVisible ? 0 : -1}
+      hidden={!isVisible}
       onClick={handleClick}
     >
-      <Icon name="arrowUp" size={18} />
+      Наверх
     </button>
   );
 }

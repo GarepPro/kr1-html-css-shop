@@ -7,27 +7,15 @@
   <meta name="theme-color" content="#f6f5f2">
   <meta name="color-scheme" content="light dark">
   <title>ShopProject — предметы для ясной работы</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%233d3af2'/%3E%3Ctext x='32' y='44' font-family='Segoe UI,Arial' font-size='34' font-weight='700' text-anchor='middle' fill='%23fff'%3ES%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23b5592f'/%3E%3Ctext x='32' y='44' font-family='Segoe UI,Arial' font-size='34' font-weight='700' text-anchor='middle' fill='%23fff'%3ES%3C/text%3E%3C/svg%3E">
   <script>
-    // Тема применяется до первой отрисовки — без мигания светлой темы.
-    // Повторяет js/theme-init.js эталонного проекта, но без Bootstrap.
     (function () {
+      var theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       try {
-        var saved = localStorage.getItem('shopproject-theme') || 'system';
-        var dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        var theme = saved === 'system' ? (dark ? 'dark' : 'light') : saved;
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.classList.add('no-transition');
-
-        // Включаем плавные цветовые переходы только после первичной отрисовки.
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            document.documentElement.classList.remove('no-transition');
-          });
-        });
-      } catch (error) {
-        document.documentElement.dataset.theme = 'light';
-      }
+        var saved = localStorage.getItem('shopproject-theme');
+        if (saved === 'light' || saved === 'dark') theme = saved;
+      } catch {}
+      document.documentElement.dataset.theme = theme;
     })();
   </script>
 </head>

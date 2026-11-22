@@ -1,3 +1,4 @@
+import { getImageSrcSet, getProductImage } from '../../data/images.js';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../ui/Icon.jsx';
@@ -46,6 +47,12 @@ export function SearchDialog({ open, onClose }) {
   };
 
   const handleKeyDown = (event) => {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+
     if (!results.length) return;
 
     if (event.key === 'ArrowDown') {
@@ -81,7 +88,11 @@ export function SearchDialog({ open, onClose }) {
           type="search"
           value={query}
           placeholder="Товар, страница или вопрос…"
+          role="combobox"
           aria-label="Поиск по сайту"
+          aria-expanded={results.length > 0}
+          aria-controls={results.length > 0 ? 'search-results' : undefined}
+          aria-activedescendant={results[activeIndex] ? `search-result-${activeIndex}` : undefined}
           onChange={(event) => setQuery(event.target.value)}
           onKeyDown={handleKeyDown}
         />
@@ -103,7 +114,10 @@ export function SearchDialog({ open, onClose }) {
                 className="search-dialog__chip"
                 type="button"
                 key={suggestion}
-                onClick={() => setQuery(suggestion)}
+                onClick={() => {
+                  setQuery(suggestion);
+                  inputRef.current?.focus();
+                }}
               >
                 {suggestion}
               </button>
@@ -113,9 +127,9 @@ export function SearchDialog({ open, onClose }) {
       )}
 
       {results.length > 0 && (
-        <ul className="search-results" role="listbox" aria-label="Результаты поиска">
+        <ul id="search-results" className="search-results" role="listbox" aria-label="Результаты поиска">
           {results.map((result, index) => (
-            <li key={result.id}>
+            <li key={result.id} role="presentation">
               <button
                 className={
                   index === activeIndex
@@ -123,22 +137,19 @@ export function SearchDialog({ open, onClose }) {
                     : 'search-results__item'
                 }
                 type="button"
+                id={`search-result-${index}`}
                 role="option"
+                tabIndex={-1}
                 aria-selected={index === activeIndex}
                 onMouseEnter={() => setActiveIndex(index)}
                 onClick={() => go(result.to)}
               >
                 <span className={`search-results__icon search-results__icon--${result.type}`}>
-                  <Icon
-                    name={
-                      result.type === 'product'
-                        ? 'box'
-                        : result.type === 'faq'
-                          ? 'chat'
-                          : 'grid'
-                    }
-                    size={16}
-                  />
+                  {result.type === 'product' ? (
+                    <img src={getProductImage(result.productId)} srcSet={getImageSrcSet(getProductImage(result.productId))} sizes="48px" alt="" />
+                  ) : (
+                    <Icon name={result.type === 'faq' ? 'chat' : 'grid'} size={16} />
+                  )}
                 </span>
                 <span className="search-results__body">
                   <span className="search-results__title">{result.title}</span>

@@ -3,18 +3,23 @@ import { Link, useParams } from 'react-router-dom';
 import PageMeta from '../components/layout/PageMeta.jsx';
 import Breadcrumbs from '../components/layout/Breadcrumbs.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
+import ProductImage from '../components/product/ProductImage.jsx';
+import { getImageSrcSet, getProductGallery } from '../data/images.js';
 import Rating from '../components/product/Rating.jsx';
 import Icon from '../components/ui/Icon.jsx';
 import { Reveal } from '../components/ui/Reveal.jsx';
 import { SectionHeading } from '../components/ui/SectionHeading.jsx';
 import { useFavorites } from '../context/FavoritesContext.jsx';
+import { useCart } from '../context/CartContext.jsx';
 import { useToast } from '../context/ToastContext.jsx';
 import {
   BADGES,
   CATALOG_PRODUCTS,
+  calculateDiscount,
   formatPrice,
   getCategoryLabel,
   getProductById,
+  getProductStatus,
   getRelatedProducts,
 } from '../data/catalog.js';
 import {
@@ -32,11 +37,14 @@ function ProductPage() {
   const productId = id ?? DEFAULT_PRODUCT_ID;
   const product = getProductById(productId);
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { addItem } = useCart();
   const { notify } = useToast();
   const [quantity, setQuantity] = useState(1);
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     setQuantity(1);
+    setActiveImage(0);
   }, [productId]);
 
   if (!product) {
@@ -56,14 +64,19 @@ function ProductPage() {
     );
   }
 
+  const gallery = getProductGallery(product.id);
   const badge = product.badge ? BADGES[product.badge] : null;
   const favorite = isFavorite(product.id);
   const reviews = PRODUCT_REVIEWS[product.id] ?? DEFAULT_REVIEWS;
   const related = getRelatedProducts(product, 3);
   const inStock = product.stock > 0;
+  const photoIndex = activeImage < gallery.length ? activeImage : 0;
+  const photoAlt = product.id === 'aurora-desk-lamp'
+    ? ['Чёрная настольная лампа Aurora на рабочем столе', 'Чёрная настольная лампа Aurora на белом фоне'][photoIndex]
+    : product.title;
   const total = formatPrice(product.price * quantity);
   const discount = product.oldPrice
-    ? Math.round((1 - product.price / product.oldPrice) * 100)
+    ? Math.round(calculateDiscount(product) / product.oldPrice * 100)
     : 0;
 
   const handleFavorite = () => {
@@ -83,6 +96,17 @@ function ProductPage() {
     });
   };
 
+  // Кладём выбранное количество в корзину и предлагаем сразу оформить заявку.
+  const handleAddToCart = () => {
+    addItem(product.id, quantity);
+    notify({
+      title: 'Товар в корзине',
+      text: `${product.title} × ${quantity}, ${total}`,
+      tone: 'success',
+      action: { to: '/cart', label: 'Оформить заявку' },
+    });
+  };
+
   return (
     <>
       <PageMeta
@@ -96,29 +120,29 @@ function ProductPage() {
         <Reveal className="product-detail__gallery">
           <div className={`product-detail__media product-detail__media--${product.accent}`}>
             {badge && <span className={`badge ${badge.modifier}`}>{badge.label}</span>}
-            <span className="product-detail__monogram" aria-hidden="true">
-              {product.title.slice(0, 1)}
-            </span>
-            <span className="product-detail__media-caption">
-              ShopProject · {getCategoryLabel(product.category)}
-            </span>
+            <ProductImage product={product} index={photoIndex} alt={photoAlt} sizes="(max-width: 1080px) 94vw, 560px" priority />
           </div>
 
-          <ul className="product-detail__thumbs" aria-label="Дополнительные изображения">
-            {['front', 'side', 'detail'].map((view) => (
-              <li key={view}>
-                <span
-                  className={`product-detail__thumb product-detail__thumb--${product.accent}`}
-                  aria-hidden="true"
-                >
-                  <Icon name="eye" size={16} />
-                </span>
-              </li>
-            ))}
-          </ul>
+          {gallery.length > 1 && (
+            <ul className="product-detail__thumbs" aria-label="Фотографии товара">
+              {gallery.map((src, index) => (
+                <li key={src}>
+                  <button
+                    className={activeImage === index ? 'product-detail__thumb product-detail__thumb--active' : 'product-detail__thumb'}
+                    type="button"
+                    onClick={() => setActiveImage(index)}
+                    aria-pressed={activeImage === index}
+                    aria-label={`Показать фото ${index + 1} из ${gallery.length}`}
+                  >
+                    <img src={src} srcSet={getImageSrcSet(src)} sizes="72px" alt="" loading="lazy" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </Reveal>
 
-        <Reveal className="product-detail__info" delay={100}>
+        <Reveal className="product-detail__info">
           <div className="product-detail__meta">
             <Link
               className="product-detail__category"
@@ -155,7 +179,7 @@ function ProductPage() {
 
             <p className={inStock ? 'buy-box__stock' : 'buy-box__stock buy-box__stock--out'}>
               <Icon name={inStock ? 'check' : 'info'} size={16} />
-              {inStock ? `В наличии · ${product.stock} шт.` : 'Нет в наличии'}
+              {getProductStatus(product)}{inStock && `, ${product.stock} шт.`}
             </p>
 
             <div className="buy-box__controls">
@@ -183,9 +207,15 @@ function ProductPage() {
                 </button>
               </div>
 
-              <Link className="button button--primary buy-box__submit" to="/order">
-                Оформить заявку · {total}
-              </Link>
+              <button
+                className="button button--primary buy-box__submit"
+                type="button"
+                onClick={handleAddToCart}
+                disabled={!inStock}
+              >
+                <Icon name="cart" size={18} />
+                В корзину за {total}
+              </button>
 
               <button
                 className={favorite ? 'icon-button icon-button--active' : 'icon-button'}
@@ -226,9 +256,7 @@ function ProductPage() {
 
       <section className="section" id="specs" aria-labelledby="specs-title">
         <SectionHeading
-          eyebrow="Характеристики"
-          title="Технические детали"
-          text="Полные параметры товара — без размытых формулировок."
+          title="Характеристики"
           id="specs-title"
         />
 
@@ -249,7 +277,7 @@ function ProductPage() {
             </table>
           </Reveal>
 
-          <Reveal className="delivery-card" delay={100}>
+          <Reveal className="delivery-card">
             <span className="delivery-card__icon">
               <Icon name="truck" size={22} />
             </span>
@@ -278,9 +306,7 @@ function ProductPage() {
 
       <section className="section section--surface" id="reviews" aria-labelledby="reviews-title">
         <SectionHeading
-          eyebrow="Отзывы"
-          title="Что говорят покупатели"
-          text={`${product.reviews} отзывов, средняя оценка ${String(product.rating).replace('.', ',')} из 5.`}
+          title="Отзывы покупателей"
           id="reviews-title"
         />
 
@@ -302,18 +328,25 @@ function ProductPage() {
               ))}
             </ul>
 
-            <Link className="button button--primary button--block" to="/order">
+            <button
+              className="button button--ghost button--block"
+              type="button"
+              onClick={() =>
+                notify({
+                  title: 'Отзывы модерируются',
+                  text: 'Форма отзыва появится после подтверждённого заказа.',
+                  tone: 'default',
+                })
+              }
+            >
               Написать отзыв
-            </Link>
+            </button>
           </Reveal>
 
           <div className="reviews-list">
-            {reviews.map((review, index) => (
-              <Reveal as="article" className="review" key={review.id} delay={index * 60}>
+            {reviews.map((review) => (
+              <Reveal as="article" className="review" key={review.id}>
                 <header className="review__header">
-                  <span className="review__avatar" aria-hidden="true">
-                    {review.author.slice(0, 1)}
-                  </span>
                   <span className="review__meta">
                     <span className="review__author">{review.author}</span>
                     <span className="review__date">{review.date}</span>
@@ -343,16 +376,15 @@ function ProductPage() {
 
       <section className="section" id="related" aria-labelledby="related-title">
         <SectionHeading
-          eyebrow="С этим покупают"
           title="Похожие товары"
           link={{ to: '/catalog', label: 'Весь каталог' }}
           id="related-title"
         />
 
         <div className="products-grid">
-          {related.map((item, index) => (
-            <Reveal key={item.id} delay={index * 70}>
-              <ProductCard product={item} index={index} />
+          {related.map((item) => (
+            <Reveal key={item.id}>
+              <ProductCard product={item} />
             </Reveal>
           ))}
         </div>

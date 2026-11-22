@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import PageMeta from '../components/layout/PageMeta.jsx';
-import Icon from '../components/ui/Icon.jsx';
 import { Reveal } from '../components/ui/Reveal.jsx';
 
 function NotFoundPage() {
@@ -25,7 +24,6 @@ function NotFoundPage() {
           <div className="not-found__actions">
             <Link className="button button--primary" to="/">
               На главную
-              <Icon name="arrowRight" size={18} />
             </Link>
             <Link className="button button--ghost" to="/catalog">
               Открыть каталог

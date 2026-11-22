@@ -1,9 +1,0 @@
-/ -> 200; root div: true
-/catalog -> 200; root div: true
-/product -> 200; root div: true
-/product/aurora-desk-lamp -> 200; root div: true
-/about -> 200; root div: true
-/order -> 200; root div: true
-/contacts -> 200; root div: true
-/account -> 200; root div: true
-/nope -> 200; root div: true

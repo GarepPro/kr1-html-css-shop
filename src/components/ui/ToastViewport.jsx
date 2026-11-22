@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useToast } from '../../context/ToastContext.jsx';
 import Icon from './Icon.jsx';
 
@@ -17,6 +18,13 @@ export function ToastViewport() {
           <span className="toast__body">
             <strong className="toast__title">{toast.title}</strong>
             {toast.text && <span className="toast__text">{toast.text}</span>}
+            {/* Кнопка-переход: «Перейти в корзину», «Открыть товар» и т.п. */}
+            {toast.action && (
+              <Link className="toast__action" to={toast.action.to} onClick={() => dismiss(toast.id)}>
+                {toast.action.label}
+                <Icon name="arrowRight" size={14} />
+              </Link>
+            )}
           </span>
           <button
             className="toast__close"

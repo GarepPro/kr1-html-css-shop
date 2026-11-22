@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import SiteHeader from './SiteHeader.jsx';
 import SiteFooter from './SiteFooter.jsx';
@@ -38,15 +38,16 @@ function ScrollManager() {
 // Общий каркас всех страниц: шапка, <main>, подвал, кнопка «Наверх»,
 // виджет чата и контейнер уведомлений.
 function PageLayout() {
+  const [chatOpen, setChatOpen] = useState(false);
   return (
     <>
       <SiteHeader />
       <main className="site-main" id="content">
-        <Outlet />
+        <Outlet context={{ openChat: () => setChatOpen(true) }} />
       </main>
       <SiteFooter />
       <ScrollTopButton />
-      <ChatWidget />
+      <ChatWidget open={chatOpen} setOpen={setChatOpen} />
       <ToastViewport />
       <ScrollManager />
     </>

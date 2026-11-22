@@ -1,102 +1,84 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useLayoutEffect, useState } from 'react';
 
-// Тема оформления: light / dark / system.
-// Как в js/theme-init.js эталона: выбор хранится в localStorage,
-// «system» синхронизируется с prefers-color-scheme.
 const STORAGE_KEY = 'shopproject-theme';
 const ThemeContext = createContext(null);
+const darkMode = () => window.matchMedia('(prefers-color-scheme: dark)');
 
-const systemTheme = () =>
-  window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-
-// Тема, применённая к <html>: полагаемся на inline-скрипт в index.html,
-// чтобы не мигать светлой темой до гидрации.
-function readInitialPreference() {
+function readPreference() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'light' || saved === 'dark' || saved === 'system') return saved;
+    if (saved === 'light' || saved === 'dark') return saved;
   } catch {
-    // localStorage может быть недоступен (приватный режим).
+    // Системный режим работает и при отключённом localStorage.
   }
   return 'system';
 }
 
 export function ThemeProvider({ children }) {
-  const [preference, setPreference] = useState(readInitialPreference);
-  const [resolved, setResolved] = useState(() =>
-    typeof window === 'undefined' ? 'light' : document.documentElement.dataset.theme || systemTheme(),
-  );
+  const [preference, setTheme] = useState(readPreference);
+  const [systemDark, setSystemDark] = useState(() => darkMode().matches);
+  const system = systemDark ? 'dark' : 'light';
+  const resolved = preference === 'system' ? system : preference;
 
-  // Применяем тему: атрибут на <html> включает CSS-переменные тёмной палитры.
   useEffect(() => {
-    const next = preference === 'system' ? systemTheme() : preference;
+    const media = darkMode();
+    const sync = () => setSystemDark(media.matches);
+    media.addEventListener('change', sync);
+    sync();
+    return () => media.removeEventListener('change', sync);
+  }, []);
 
-    document.documentElement.dataset.theme = next;
-    setResolved(next);
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    if (root.dataset.theme === resolved) return;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Снимок новой темы должен содержать уже окончательные цвета всех блоков.
+    function commitPalette() {
+      root.classList.add('theme-snapshot');
+      root.dataset.theme = resolved;
+      void root.offsetWidth;
+      root.classList.remove('theme-snapshot');
+    }
+    if (reduced) {
+      commitPalette();
+      return;
+    }
+    if (typeof document.startViewTransition === 'function') {
+      let current = true;
+      const transition = document.startViewTransition(() => {
+        if (current) commitPalette();
+      });
+      return () => {
+        current = false;
+        transition.skipTransition();
+      };
+    }
+    root.classList.add('theme-changing');
+    root.dataset.theme = resolved;
+    const timer = window.setTimeout(() => root.classList.remove('theme-changing'), 300);
+    return () => {
+      window.clearTimeout(timer);
+      root.classList.remove('theme-changing');
+    };
+  }, [resolved]);
 
+  useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, preference);
     } catch {
-      // Игнорируем недоступное хранилище.
+      // Выбранная тема продолжает действовать до перезагрузки.
     }
   }, [preference]);
 
-  // Следим за системной темой, пока выбран режим «как в системе».
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = () => {
-      if (preference !== 'system') return;
-      const next = systemTheme();
-      document.documentElement.dataset.theme = next;
-      setResolved(next);
-    };
+  function toggleTheme() {
+    setTheme((current) => (current === 'system' ? system : current) === 'dark' ? 'light' : 'dark');
+  }
 
-    media.addEventListener('change', handleChange);
-    return () => media.removeEventListener('change', handleChange);
-  }, [preference]);
-
-  // Плавная «заливка» новой темы через View Transitions API.
-  // Если API нет или пользователь просил меньше анимации — просто переставляем тему.
-  const applyWithTransition = useCallback((mutate) => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (reduced || typeof document.startViewTransition !== 'function') {
-      mutate();
-      return;
-    }
-
-    document.startViewTransition(() => mutate());
-  }, []);
-
-  const setTheme = useCallback(
-    (next) => {
-      if (next === preference) return;
-
-      applyWithTransition(() => {
-        const value = next === 'system' ? systemTheme() : next;
-        document.documentElement.dataset.theme = value;
-        setResolved(value);
-        setPreference(next);
-      });
-    },
-    [applyWithTransition, preference],
+  return (
+    <ThemeContext.Provider value={{ preference, resolved, setTheme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
-
-  const toggleTheme = useCallback(() => {
-    applyWithTransition(() => {
-      const next = resolved === 'dark' ? 'light' : 'dark';
-      document.documentElement.dataset.theme = next;
-      setResolved(next);
-      setPreference(next);
-    });
-  }, [applyWithTransition, resolved]);
-
-  const value = useMemo(
-    () => ({ preference, resolved, setTheme, toggleTheme }),
-    [preference, resolved, setTheme, toggleTheme],
-  );
-
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 
 export function useTheme() {

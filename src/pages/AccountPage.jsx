@@ -71,16 +71,16 @@ function AccountPage() {
             {ACCOUNT_USER.initials}
           </span>
           <div className="account-profile__body">
-            <span className="account-profile__eyebrow">
-              Клиент с {ACCOUNT_USER.memberSince} · уровень {ACCOUNT_USER.level}
-            </span>
             <h1 className="account-profile__name">{ACCOUNT_USER.name}</h1>
+            <p className="account-profile__membership">
+              Клиент с {ACCOUNT_USER.memberSince}, уровень {ACCOUNT_USER.level}
+            </p>
             <p className="account-profile__contacts">
               <span>{ACCOUNT_USER.email}</span>
               <span>{ACCOUNT_USER.phone}</span>
             </p>
 
-            <div className="level-bar" aria-label={`Прогресс до уровня ${ACCOUNT_USER.nextLevel}`}>
+            <div className="level-bar">
               <span className="level-bar__track">
                 <span
                   className="level-bar__fill"
@@ -104,22 +104,22 @@ function AccountPage() {
         </Reveal>
 
         <ul className="account-metrics">
-          <Reveal as="li" className="account-metric" delay={60}>
+          <Reveal as="li" className="account-metric">
             <span className="account-metric__label">Баллы</span>
             <span className="account-metric__value">{ACCOUNT_USER.points}</span>
             <span className="account-metric__note">1 балл = 1 ₽</span>
           </Reveal>
-          <Reveal as="li" className="account-metric" delay={120}>
+          <Reveal as="li" className="account-metric">
             <span className="account-metric__label">Заказы</span>
             <span className="account-metric__value">{ACCOUNT_USER.ordersTotal}</span>
             <span className="account-metric__note">за всё время</span>
           </Reveal>
-          <Reveal as="li" className="account-metric" delay={180}>
+          <Reveal as="li" className="account-metric">
             <span className="account-metric__label">Избранное</span>
             <span className="account-metric__value">{favorites.length}</span>
             <span className="account-metric__note">товаров</span>
           </Reveal>
-          <Reveal as="li" className="account-metric" delay={240}>
+          <Reveal as="li" className="account-metric">
             <span className="account-metric__label">Уведомления</span>
             <span className="account-metric__value">{unread}</span>
             <span className="account-metric__note">новых</span>
@@ -129,7 +129,7 @@ function AccountPage() {
 
       <section className="account-layout">
         <nav className="account-tabs" aria-label="Разделы кабинета">
-          <ul className="account-tabs__list" role="tablist">
+          <ul className="account-tabs__list">
             {TABS.map((item) => (
               <li key={item.id}>
                 <button
@@ -139,9 +139,7 @@ function AccountPage() {
                       : 'account-tabs__item'
                   }
                   type="button"
-                  role="tab"
-                  aria-selected={tab === item.id}
-                  aria-controls={`account-panel-${item.id}`}
+                  aria-pressed={tab === item.id}
                   onClick={() => setTab(item.id)}
                 >
                   <Icon name={item.icon} size={18} />
@@ -153,11 +151,11 @@ function AccountPage() {
 
           <div className="account-tabs__help">
             <Icon name="chat" size={18} />
-            <p>Вопрос по заказу? Напишите в чат — ответим за минуту.</p>
+            <p>Вопросы по заказам принимаем в чате.</p>
           </div>
         </nav>
 
-        <div className="account-content" id={`account-panel-${tab}`} role="tabpanel">
+        <div className="account-content">
           {tab === 'overview' && (
             <div className="account-grid">
               <Reveal className="account-card account-card--wide">
@@ -165,7 +163,6 @@ function AccountPage() {
                   <h2 className="account-card__title">Последние заказы</h2>
                   <Link className="account-card__link" to="/account#orders">
                     Все заказы
-                    <Icon name="arrowRight" size={15} />
                   </Link>
                 </header>
 
@@ -186,7 +183,7 @@ function AccountPage() {
                 ))}
               </Reveal>
 
-              <Reveal className="account-card" delay={80}>
+              <Reveal className="account-card">
                 <header className="account-card__head">
                   <h2 className="account-card__title">Уведомления</h2>
                 </header>
@@ -205,7 +202,7 @@ function AccountPage() {
                 </ul>
               </Reveal>
 
-              <Reveal className="account-card" delay={140}>
+              <Reveal className="account-card">
                 <header className="account-card__head">
                   <h2 className="account-card__title">Адреса доставки</h2>
                 </header>
@@ -254,7 +251,7 @@ function AccountPage() {
                       </span>
                       <span className="orders-list__total">{formatPrice(order.total)}</span>
                     </div>
-                    <p className="orders-list__items">{order.items.join(' · ')}</p>
+                    <p className="orders-list__items">{order.items.join(', ')}</p>
                     <div className="orders-list__footer">
                       <span className="orders-list__date">{order.date}</span>
                       <button
@@ -280,9 +277,9 @@ function AccountPage() {
 
               {favoriteProducts.length > 0 ? (
                 <div className="products-grid products-grid--compact">
-                  {favoriteProducts.map((product, index) => (
+                  {favoriteProducts.map((product) => (
                     <div className="account-favorite" key={product.id}>
-                      <ProductCard product={product} index={index} />
+                      <ProductCard product={product} />
                       <button
                         className="account-favorite__remove"
                         type="button"
@@ -301,7 +298,7 @@ function AccountPage() {
                   </span>
                   <h3 className="empty-state__title">Пока пусто</h3>
                   <p className="empty-state__text">
-                    Нажмите на сердце в карточке товара — позиция появится здесь.
+                    Нажмите на сердце в карточке товара, чтобы добавить его в избранное.
                   </p>
                   <Link className="button button--primary" to="/catalog">
                     Перейти в каталог
@@ -424,7 +421,7 @@ function AccountPage() {
                 <div className="settings-row">
                   <span className="settings-row__body">
                     <strong>Пароль</strong>
-                    <span>Последнее изменение — август 2026</span>
+                    <span>Последнее изменение в августе 2026 года</span>
                   </span>
                   <button
                     className="button button--ghost button--sm"

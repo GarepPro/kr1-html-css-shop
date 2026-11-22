@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import Icon from '../ui/Icon.jsx';
 
 // Источники данных для поля «Тема заявки», как в HTML-версии.
 export const ORDER_TOPICS = [
@@ -17,7 +18,6 @@ const PAGE_TEXTS = {
   agreement: 'Я согласен на обработку данных *',
   hintField: 'phone',
   hintText: 'Формат: +7 (900) 000-00-00',
-  success: 'Заявка успешно отправлена! Мы свяжемся с вами.',
   commentRows: 5,
 };
 
@@ -28,16 +28,21 @@ const MODAL_TEXTS = {
   agreement: 'Я согласен на обработку данных',
   hintField: 'name',
   hintText: 'Минимум 2 символа.',
-  success: 'Форма успешно отправлена!',
   commentRows: 4,
 };
 
 // Форма заявки (БЭМ-блок order-form) в двух режимах:
-// - variant="page"  — форма на странице /order;
+// - variant="page"  — форма внутри корзины на странице /cart;
 // - variant="modal" — форма внутри модального окна на главной.
 // selectedProduct передаётся только в модалке (скрытое поле).
-// onCancel выводит кнопку «Закрыть» вместо «Очистить» и скрывает сообщение об успехе.
-function OrderForm({ variant = 'page', selectedProduct, onCancel, onSuccess = () => {} }) {
+// orderLines — состав корзины: уходит скрытым полем «Состав заказа».
+// onCancel выводит кнопку «Закрыть» вместо «Очистить».
+function OrderForm({
+  variant = 'page',
+  selectedProduct,
+  orderLines = [],
+  onCancel,
+}) {
   const isPage = variant !== 'modal';
   const texts = isPage ? PAGE_TEXTS : MODAL_TEXTS;
   const formClass = isPage ? 'order-form order-form--page' : 'order-form';
@@ -50,7 +55,12 @@ function OrderForm({ variant = 'page', selectedProduct, onCancel, onSuccess = ()
   const agreementId = `${variant}-agreement`;
   const hintId = `${variant}-${texts.hintField}-hint`;
   const formRef = useRef(null);
-  const [successVisible, setSuccessVisible] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Состав заказа в виде текста: «Лампа Aurora Desk × 2; Коврик Desk Pad × 1».
+  const orderSummary = orderLines
+    .map((line) => `${line.product.title} × ${line.qty}`)
+    .join('; ');
 
   // aria-describedby добавляем только к тому полю, у которого есть подсказка.
   const describedBy = (field) => {
@@ -75,21 +85,20 @@ function OrderForm({ variant = 'page', selectedProduct, onCancel, onSuccess = ()
           field.setAttribute('aria-invalid', 'true');
         }
       });
+      setIsSubmitted(false);
       form.reportValidity();
       return;
     }
 
-    form.reset();
-    setSuccessVisible(true);
-    onSuccess();
+    setIsSubmitted(true);
   };
 
-  // Очистка: снимаем подсветку ошибок и скрываем прошлое сообщение об успехе.
+  // Очистка: снимаем подсветку ошибок и скрываем уведомление.
   const handleReset = () => {
     Array.from(formRef.current.elements).forEach((field) => {
       if (field.willValidate) field.removeAttribute('aria-invalid');
     });
-    setSuccessVisible(false);
+    setIsSubmitted(false);
   };
 
   return (
@@ -101,9 +110,13 @@ function OrderForm({ variant = 'page', selectedProduct, onCancel, onSuccess = ()
       noValidate
       onSubmit={handleSubmit}
       onReset={handleReset}
+      onChange={() => setIsSubmitted(false)}
     >
       {selectedProduct !== undefined && (
         <input name="selected-product" type="hidden" value={selectedProduct} readOnly />
+      )}
+      {orderLines.length > 0 && (
+        <input name="order" type="hidden" value={orderSummary} readOnly />
       )}
 
       <div className="order-form__field">
@@ -212,30 +225,26 @@ function OrderForm({ variant = 'page', selectedProduct, onCancel, onSuccess = ()
         </label>
       </div>
 
-      {onCancel ? (
-        <div className="order-form__actions">
+      <div className="order-form__actions">
+        {onCancel ? (
           <button className="button button--secondary" type="button" onClick={onCancel}>
             Закрыть
           </button>
-          <button className="button button--primary" type="submit">
-            Отправить заявку
+        ) : (
+          <button className="button button--secondary" type="reset">
+            Очистить
           </button>
-        </div>
-      ) : (
-        <>
-          <div className="order-form__actions">
-            <button className="button button--secondary" type="reset">
-              Очистить
-            </button>
-            <button className="button button--primary" type="submit">
-              Отправить заявку
-            </button>
-          </div>
+        )}
+        <button className="button button--primary" type="submit">
+          Отправить заявку
+        </button>
+      </div>
 
-          <p className="success-message" role="status" hidden={!successVisible}>
-            {texts.success}
-          </p>
-        </>
+      {isSubmitted && (
+        <p className="order-form__notice" role="status">
+          <Icon name="check" size={18} />
+          Заявка успешно отправлена!
+        </p>
       )}
     </form>
   );

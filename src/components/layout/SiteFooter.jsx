@@ -10,7 +10,7 @@ const FOOTER_LINKS = [
       { to: '/catalog', label: 'Каталог' },
       { to: '/product/aurora-desk-lamp', label: 'Лампа Aurora Desk' },
       { to: '/product/keyboard-slim', label: 'Клавиатура Slim Keys' },
-      { to: '/order', label: 'Оформить заявку' },
+      { to: '/cart', label: 'Корзина и заявка' },
     ],
   },
   {
@@ -47,7 +47,7 @@ function SiteFooter() {
               </a>
               <span className="site-footer__contact">
                 <Icon name="clock" size={16} />
-                Ежедневно, 10:00–20:00
+                Ежедневно с 10:00 до 20:00
               </span>
               <a className="site-footer__contact" href="mailto:hello@shopproject.ru">
                 <Icon name="mail" size={16} />

@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom';
 import Icon from '../ui/Icon.jsx';
 import Rating from './Rating.jsx';
-import { BADGES, formatPrice } from '../../data/catalog.js';
+import ProductImage from './ProductImage.jsx';
+import { BADGES, formatPrice, getProductStatus } from '../../data/catalog.js';
 import { useFavorites } from '../../context/FavoritesContext.jsx';
+import { useCart } from '../../context/CartContext.jsx';
 import { useToast } from '../../context/ToastContext.jsx';
 
-// Карточка товара (БЭМ-блок product-card).
-// Пропсы:
-// - product: товар из data/catalog.js;
-// - index: позиция в сетке для каскадной задержки появления;
-// - onOrder: если передан, вместо ссылки на каталог показывается кнопка заказа.
-export function ProductCard({ product, index = 0, onOrder }) {
+export function ProductCard({ product }) {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { addItem } = useCart();
   const { notify } = useToast();
   const badge = product.badge ? BADGES[product.badge] : null;
   const favorite = isFavorite(product.id);
@@ -27,11 +25,20 @@ export function ProductCard({ product, index = 0, onOrder }) {
     });
   };
 
+  // Товар попадает в корзину, после чего можно сразу уйти к оформлению.
+  const handleAddToCart = () => {
+    addItem(product.id, 1);
+
+    notify({
+      title: 'Товар в корзине',
+      text: `${product.title}, ${formatPrice(product.price)}`,
+      tone: 'success',
+      action: { to: '/cart', label: 'Перейти в корзину' },
+    });
+  };
+
   return (
-    <article
-      className="product-card"
-      style={{ '--reveal-delay': `${Math.min(index, 8) * 70}ms` }}
-    >
+    <article className="product-card">
       <div className={`product-card__media product-card__media--${product.accent}`}>
         {badge && <span className={`badge ${badge.modifier}`}>{badge.label}</span>}
 
@@ -47,18 +54,16 @@ export function ProductCard({ product, index = 0, onOrder }) {
           <Icon name="heart" size={18} filled={favorite} />
         </button>
 
-        {/* Визуальная заглушка товара: градиент + монограмма категории. */}
-        <span className="product-card__monogram" aria-hidden="true">
-          {product.title.slice(0, 1)}
-        </span>
+        <Link className="product-card__photo-link" to={`/product/${product.id}`}>
+          <ProductImage product={product} sizes="(max-width: 760px) calc(100vw - 32px), (max-width: 1080px) 46vw, 380px" />
+        </Link>
       </div>
 
       <div className="product-card__body">
-        <Rating value={product.rating} size={13} showValue reviews={product.reviews} />
-
         <h3 className="product-card__title">
           <Link to={`/product/${product.id}`}>{product.title}</Link>
         </h3>
+        <Rating value={product.rating} size={13} showValue reviews={product.reviews} />
         <p className="product-card__description">{product.tagline}</p>
 
         <div className="product-card__footer">
@@ -74,24 +79,24 @@ export function ProductCard({ product, index = 0, onOrder }) {
                 inStock ? 'product-card__stock' : 'product-card__stock product-card__stock--out'
               }
             >
-              {inStock ? 'В наличии' : 'Нет в наличии'}
+              {getProductStatus(product)}
             </span>
           </p>
 
-          {onOrder ? (
+          <div className="product-card__actions">
             <button
               className="button button--primary button--sm"
               type="button"
-              onClick={() => onOrder(product)}
+              onClick={handleAddToCart}
+              disabled={!inStock}
             >
-              Заказать
+              <Icon name="cart" size={16} />
+              В корзину
             </button>
-          ) : (
-            <Link className="button button--secondary button--sm" to={`/product/${product.id}`}>
+            <Link className="product-card__details" to={`/product/${product.id}`}>
               Подробнее
-              <Icon name="arrowRight" size={16} />
             </Link>
-          )}
+          </div>
         </div>
       </div>
     </article>

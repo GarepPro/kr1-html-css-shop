@@ -1,3 +1,4 @@
+import { getImageSrcSet, STUDIO_IMAGE } from '../data/images.js';
 import { Link } from 'react-router-dom';
 import PageMeta from '../components/layout/PageMeta.jsx';
 import Breadcrumbs from '../components/layout/Breadcrumbs.jsx';
@@ -26,14 +27,12 @@ function AboutPage() {
 
       <section className="page-hero page-hero--split">
         <Reveal className="page-hero__content">
-          <span className="page-hero__eyebrow">{ABOUT_HERO.eyebrow}</span>
           <h1 className="page-hero__title">{ABOUT_HERO.title}</h1>
           <p className="page-hero__text">{ABOUT_HERO.text}</p>
 
           <div className="hero__actions">
             <Link className="button button--primary" to="/catalog">
               Смотреть каталог
-              <Icon name="arrowRight" size={18} />
             </Link>
             <Link className="button button--ghost" to="/contacts">
               Приехать в шоурум
@@ -41,15 +40,8 @@ function AboutPage() {
           </div>
         </Reveal>
 
-        <Reveal className="about-visual" delay={120} variant="scale">
-          <div className="about-visual__frame" aria-hidden="true">
-            <span className="about-visual__mark">SP</span>
-            <span className="about-visual__caption">Студия предметов для работы</span>
-          </div>
-          <div className="about-visual__note">
-            <Icon name="spark" size={18} />
-            <span>12 позиций в каталоге — и все протестированы месяцем работы в офисе</span>
-          </div>
+        <Reveal className="about-visual">
+          <img className="about-visual__photo" src={STUDIO_IMAGE.src} srcSet={getImageSrcSet(STUDIO_IMAGE.src)} sizes="(max-width: 760px) calc(100vw - 32px), 550px" alt={STUDIO_IMAGE.alt} />
         </Reveal>
       </section>
 
@@ -66,7 +58,7 @@ function AboutPage() {
       </Reveal>
 
       <section className="section section--surface" id="story" aria-labelledby="story-title">
-        <SectionHeading eyebrow="История" title="С чего всё началось" id="story-title" />
+        <SectionHeading title="История ShopProject" id="story-title" />
 
         <div className="story-layout">
           <Reveal className="story-text">
@@ -77,7 +69,7 @@ function AboutPage() {
             ))}
           </Reveal>
 
-          <Reveal className="story-quotes" delay={120}>
+          <Reveal className="story-quotes">
             {ABOUT_QUOTES.map((quote) => (
               <blockquote className="story-quote" key={quote.author}>
                 <p className="story-quote__text">«{quote.text}»</p>
@@ -90,15 +82,13 @@ function AboutPage() {
 
       <section className="section" id="values" aria-labelledby="values-title">
         <SectionHeading
-          eyebrow="Ценности"
-          title="Четыре правила, от которых не отступаем"
-          text="Они определяют, какие товары попадают в каталог и как работает сервис."
+          title="Товары и обслуживание"
           id="values-title"
         />
 
         <ul className="advantages-list">
-          {ABOUT_VALUES.map((value, index) => (
-            <Reveal as="li" className="advantage" key={value.title} delay={index * 70}>
+          {ABOUT_VALUES.map((value) => (
+            <Reveal as="li" className="advantage" key={value.title}>
               <span className="advantage__icon">
                 <Icon name={value.icon} size={22} />
               </span>
@@ -110,11 +100,11 @@ function AboutPage() {
       </section>
 
       <section className="section section--surface" id="timeline" aria-labelledby="timeline-title">
-        <SectionHeading eyebrow="Развитие" title="Семь лет по шагам" id="timeline-title" />
+        <SectionHeading title="Как развивался ShopProject" id="timeline-title" />
 
         <ol className="timeline">
-          {ABOUT_TIMELINE.map((item, index) => (
-            <Reveal as="li" className="timeline__item" key={item.year} delay={index * 80}>
+          {ABOUT_TIMELINE.map((item) => (
+            <Reveal as="li" className="timeline__item" key={item.year}>
               <span className="timeline__year">{item.year}</span>
               <div className="timeline__body">
                 <h3 className="timeline__title">{item.title}</h3>
@@ -127,15 +117,13 @@ function AboutPage() {
 
       <section className="section" id="team" aria-labelledby="team-title">
         <SectionHeading
-          eyebrow="Команда"
-          title="Люди за прилавком"
-          text="Небольшая команда, которая выбирает, тестирует и упаковывает каждую вещь."
+          title="Команда"
           id="team-title"
         />
 
         <ul className="team-grid">
-          {ABOUT_TEAM.map((member, index) => (
-            <Reveal as="li" className="team-card" key={member.name} delay={index * 70}>
+          {ABOUT_TEAM.map((member) => (
+            <Reveal as="li" className="team-card" key={member.name}>
               <span className={`team-card__avatar team-card__avatar--${member.accent}`} aria-hidden="true">
                 {member.initials}
               </span>
@@ -149,15 +137,13 @@ function AboutPage() {
       <Reveal className="section cta">
         <div className="cta__inner">
           <div className="cta__copy">
-            <h2 className="cta__title">Приезжайте посмотреть вживую</h2>
+            <h2 className="cta__title">Шоурум в Москве</h2>
             <p className="cta__text">
-              Шоурум в Москве открыт ежедневно с 10:00 до 21:00. Покажем материалы и дадим вещи
-              «потрогать» перед покупкой.
+              Открыт ежедневно с 10:00 до 21:00. Товары можно посмотреть перед покупкой.
             </p>
           </div>
-          <Link className="button button--primary" to="/contacts">
+          <Link className="button button--ghost" to="/contacts">
             Контакты и адрес
-            <Icon name="arrowRight" size={18} />
           </Link>
         </div>
       </Reveal>

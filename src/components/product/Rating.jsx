@@ -5,7 +5,8 @@ export function Rating({ value, max = 5, reviews, showValue = false, size = 14 }
   const rounded = Math.round(value);
 
   return (
-    <span className="rating" aria-label={`Оценка ${value} из ${max}`}>
+    <span className="rating">
+      <span className="visually-hidden">Оценка {value} из {max}</span>
       <span className="rating__stars" aria-hidden="true">
         {Array.from({ length: max }, (_, index) => (
           <Icon
@@ -18,7 +19,7 @@ export function Rating({ value, max = 5, reviews, showValue = false, size = 14 }
           />
         ))}
       </span>
-      {showValue && <span className="rating__value">{String(value).replace('.', ',')}</span>}
+      {showValue && <span className="rating__value" aria-hidden="true">{String(value).replace('.', ',')}</span>}
       {reviews !== undefined && <span className="rating__reviews">{reviews} отзывов</span>}
     </span>
   );

@@ -1,12 +1,21 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import PageMeta from '../components/layout/PageMeta.jsx';
 import Breadcrumbs from '../components/layout/Breadcrumbs.jsx';
 import Icon from '../components/ui/Icon.jsx';
 import { Reveal } from '../components/ui/Reveal.jsx';
 import { SectionHeading } from '../components/ui/SectionHeading.jsx';
-import { CONTACT_CHANNELS, CONTACT_FAQ } from '../data/contacts.js';
+import {
+  CONTACT_CHANNELS,
+  CONTACT_FAQ,
+  SHOWROOM_POINTS,
+} from '../data/contacts.js';
 
 function ContactsPage() {
+  const { openChat } = useOutletContext();
+  const [selected, setSelected] = useState(SHOWROOM_POINTS[0]);
+  const query = new URLSearchParams({ mode: 'search', text: selected.address, z: '16' });
+
   return (
     <>
       <PageMeta
@@ -18,11 +27,9 @@ function ContactsPage() {
 
       <section className="page-hero page-hero--compact">
         <Reveal className="page-hero__content">
-          <span className="page-hero__eyebrow">На связи каждый день</span>
           <h1 className="page-hero__title">Контакты</h1>
           <p className="page-hero__text">
-            Ответим в чате за минуту, позвоним в течение 15 минут в рабочее время или встретим
-            в шоуруме. Выбирайте удобный способ.
+            Поможем выбрать вещь, уточнить наличие в шоуруме и договориться о самовывозе.
           </p>
         </Reveal>
       </section>
@@ -33,8 +40,8 @@ function ContactsPage() {
         </h2>
 
         <ul className="contact-grid">
-          {CONTACT_CHANNELS.map((channel, index) => (
-            <Reveal as="li" className="contact-card" key={channel.label} delay={index * 70}>
+          {CONTACT_CHANNELS.map((channel) => (
+            <Reveal as="li" className="contact-card" key={channel.label}>
               <span className="contact-card__icon">
                 <Icon name={channel.icon} size={22} />
               </span>
@@ -44,7 +51,7 @@ function ContactsPage() {
                   {channel.value}
                 </a>
               ) : (
-                <span className="contact-card__value">{channel.value}</span>
+                <button className="contact-card__value" type="button" onClick={openChat}>{channel.value}</button>
               )}
               <span className="contact-card__note">{channel.note}</span>
             </Reveal>
@@ -54,61 +61,79 @@ function ContactsPage() {
 
       <section className="section section--surface" id="showroom" aria-labelledby="showroom-title">
         <SectionHeading
-          eyebrow="Шоурум"
-          title="Посмотрите вещи вживую"
-          text="Москва, Большая Новодмитровская, 36. Второй этаж, вход со стороны двора."
+          title="Шоурум и самовывоз"
+          text="Коллекцию можно посмотреть в Москве, а заказ забрать в Химках или Мытищах."
           id="showroom-title"
         />
 
         <div className="showroom-layout">
-          <Reveal className="showroom-map" variant="scale">
-            <span className="showroom-map__pin">
-              <Icon name="pin" size={22} />
-            </span>
-            <span className="showroom-map__grid" aria-hidden="true" />
-            <span className="showroom-map__caption">Схема проезда · 5 минут от метро «Дмитровская»</span>
-          </Reveal>
-
-          <Reveal className="showroom-info" delay={100}>
-            <h3 className="showroom-info__title">Часы работы</h3>
-            <ul className="showroom-info__hours">
-              <li>
-                <span>Пн–Пт</span>
-                <strong>10:00 – 21:00</strong>
-              </li>
-              <li>
-                <span>Сб–Вс</span>
-                <strong>11:00 – 20:00</strong>
-              </li>
-              <li>
-                <span>Самовывоз</span>
-                <strong>до 20:00</strong>
-              </li>
+          <div className="showroom-info">
+            <h3 className="showroom-info__title">Выберите адрес на карте</h3>
+            <ul className="showroom-points">
+              {SHOWROOM_POINTS.map((point) => (
+                <li key={point.id}>
+                  <button
+                    className="showroom-point"
+                    type="button"
+                    aria-pressed={selected.id === point.id}
+                    aria-controls="showroom-map"
+                    onClick={() => setSelected(point)}
+                  >
+                    <Icon name="pin" size={20} />
+                    <span className="showroom-point__body">
+                      <strong className="showroom-point__title">{point.title}</strong>
+                      <span>{point.address}</span>
+                      <span>{point.note}</span>
+                      <span className="showroom-point__hours">{point.hours}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
             </ul>
+          </div>
+          <div>
+            <div className="showroom-map" id="showroom-map">
+              <iframe
+                className="showroom-map__frame"
+                src={`https://yandex.ru/map-widget/v1/?${query}`}
+                width="540" height="540"
+                title={`Яндекс Карты — ${selected.title}`}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
+            <a className="showroom-map__link" href={`https://yandex.ru/maps/?${query}`} target="_blank" rel="noreferrer">
+              {selected.title} в Яндекс Картах
+            </a>
+          </div>
+        </div>
+      </section>
 
-            <p className="showroom-info__text">
-              Хотите протестировать технику перед покупкой — напишите в чат, подготовим всё
-              к вашему приезду.
-            </p>
-
-            <Link className="button button--primary" to="/order">
-              Записаться на визит
-              <Icon name="arrowRight" size={18} />
-            </Link>
-          </Reveal>
+      <section className="section" aria-labelledby="visit-title">
+        <SectionHeading title="Перед поездкой" id="visit-title" />
+        <div className="visit-guide">
+          <div>
+            <h3>Если выбираете в шоуруме</h3>
+            <p>Напишите, какие модели хотите сравнить. Подготовим их к визиту, чтобы вы могли проверить свет лампы, ход клавиш или посадку наушников.</p>
+            <button type="button" className="visit-guide__action" onClick={openChat}>Уточнить наличие в чате</button>
+          </div>
+          <div>
+            <h3>Если забираете заказ</h3>
+            <p>При оформлении укажите удобный пункт в комментарии. Дождитесь подтверждения от менеджера и сохраните номер заказа. При получении можно проверить комплектность и внешний вид.</p>
+          </div>
         </div>
       </section>
 
       <section className="section" id="feedback" aria-labelledby="feedback-title">
         <SectionHeading
-          eyebrow="FAQ"
           title="Вопросы о визите и связи"
           id="feedback-title"
         />
 
         <div className="faq-list">
-          {CONTACT_FAQ.map((item, index) => (
-            <Reveal delay={index * 60} key={item.question}>
+          {CONTACT_FAQ.map((item) => (
+            <Reveal key={item.question}>
               <details className="faq-item">
                 <summary className="faq-item__question">
                   {item.question}
@@ -121,20 +146,6 @@ function ContactsPage() {
         </div>
       </section>
 
-      <Reveal className="section cta">
-        <div className="cta__inner">
-          <div className="cta__copy">
-            <h2 className="cta__title">Не нашли нужный ответ?</h2>
-            <p className="cta__text">
-              Напишите в чат — консультант на связи с 10:00 до 20:00 и ответит за минуту.
-            </p>
-          </div>
-          <Link className="button button--primary" to="/order">
-            Оставить заявку
-            <Icon name="arrowRight" size={18} />
-          </Link>
-        </div>
-      </Reveal>
     </>
   );
 }

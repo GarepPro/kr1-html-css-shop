@@ -13,3 +13,12 @@ Thumbs.db
 node_modules/
 dist/
 .render-check/
+
+# Local review artifacts and image drafts
+/.hallmark/
+/..check-*.txt
+/..classcheck-backup.mjs
+/..render-debug.txt
+/..ymap-dump.html
+/package-lock.backup.json
+/images/product-aurora-desk-lamp*.jpg

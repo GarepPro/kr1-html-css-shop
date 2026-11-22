@@ -4,7 +4,7 @@ import HomePage from './pages/HomePage.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import ProductPage from './pages/ProductPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
-import OrderPage from './pages/OrderPage.jsx';
+import CartPage from './pages/CartPage.jsx';
 import ContactsPage from './pages/ContactsPage.jsx';
 import AccountPage from './pages/AccountPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
@@ -12,6 +12,8 @@ import NotFoundPage from './pages/NotFoundPage.jsx';
 // Маршруты сайта: каждая ссылка меню — отдельная страница.
 // Карточка товара открывается по id: /product/aurora-desk-lamp.
 // Старый адрес /product оставлен как алиас (редирект на товар по умолчанию).
+// /cart — корзина с встроенной формой заявки; /order — старый адрес формы,
+// он перенаправляет в корзину, чтобы ссылки из поиска и чата не ломались.
 export const router = createBrowserRouter(
   [
     {
@@ -23,7 +25,8 @@ export const router = createBrowserRouter(
         { path: 'product', element: <ProductPage /> },
         { path: 'product/:id', element: <ProductPage /> },
         { path: 'about', element: <AboutPage /> },
-        { path: 'order', element: <OrderPage /> },
+        { path: 'cart', element: <CartPage /> },
+        { path: 'order', element: <CartPage /> },
         { path: 'contacts', element: <ContactsPage /> },
         { path: 'account', element: <AccountPage /> },
         { path: '*', element: <NotFoundPage /> },
