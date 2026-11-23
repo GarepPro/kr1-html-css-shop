@@ -172,6 +172,10 @@
     grid-template-columns: 1fr;
   }
 
+  .site-footer__contacts {
+    padding-inline-end: 96px;
+  }
+
   .about-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

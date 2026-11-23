@@ -5,7 +5,7 @@ import Icon from '../components/ui/Icon.jsx';
 import Rating from '../components/product/Rating.jsx';
 import { Reveal } from '../components/ui/Reveal.jsx';
 import { SectionHeading } from '../components/ui/SectionHeading.jsx';
-import { HERO_IMAGE, getImageSrcSet, getProductImage } from '../data/images.js';
+import { HERO_IMAGE, getImageSrcSet, getProductImage, getProductImageAlt } from '../data/images.js';
 import {
   ADVANTAGES,
   CTA,
@@ -34,8 +34,8 @@ function HomePage() {
   return (
     <>
       <PageMeta
-        title="ShopProject — предметы для рабочего стола"
-        description="ShopProject: лампы, клавиатуры, блокноты и аудио для рабочего места. Доставка за 1–2 дня, гарантия до 5 лет, возврат 60 дней."
+        title="Стол и дело — предметы для рабочего стола"
+        description="Стол и дело: лампы, клавиатуры, блокноты и аудио для рабочего места. Доставка за 1–2 дня, гарантия до 5 лет, возврат 60 дней."
       />
 
       <section className="hero">
@@ -65,7 +65,7 @@ function HomePage() {
           {HOME_CATEGORIES.map((category) => (
             <Reveal as="li" className="category-tile" key={category.slug}>
               <Link className="category-tile__link" to={`/catalog?category=${category.slug}`}>
-                <img className="category-tile__photo" src={getProductImage(category.cover)} srcSet={getImageSrcSet(getProductImage(category.cover))} sizes="(max-width: 480px) 45vw, (max-width: 1080px) 30vw, 200px" alt="" loading="lazy" />
+                <img className="category-tile__photo" src={getProductImage(category.cover)} srcSet={getImageSrcSet(getProductImage(category.cover))} sizes="(max-width: 480px) 45vw, (max-width: 1080px) 30vw, 200px" alt={getProductImageAlt(getProductImage(category.cover))} loading="lazy" />
                 <span className="category-tile__label">{category.label}</span>
               </Link>
             </Reveal>
@@ -103,7 +103,7 @@ function HomePage() {
           {ADVANTAGES.map((advantage) => (
             <Reveal as="li" className="advantage" key={advantage.title}>
               <span className="advantage__icon">
-                <Icon name={advantage.icon} size={22} />
+                <Icon name={advantage.icon} size={33} />
               </span>
               <h3 className="advantage__title">{advantage.title}</h3>
               <p className="advantage__text">{advantage.text}</p>

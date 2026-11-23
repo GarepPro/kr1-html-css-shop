@@ -34,8 +34,8 @@ function CartPage() {
   return (
     <>
       <PageMeta
-        title="Корзина и оформление — ShopProject"
-        description="Корзина ShopProject: товары, количество, стоимость доставки и форма заявки."
+        title="Корзина и оформление — «Стол и дело»"
+        description="Корзина «Стол и дело»: товары, количество, стоимость доставки и форма заявки."
       />
 
       <Breadcrumbs current="Корзина" />
@@ -144,7 +144,7 @@ function CartPage() {
             </div>
           )}
 
-          <h3 className="cart-form__title">
+          <h3 className="cart-form__title" id="request">
             <Icon name="edit" size={18} />
             Контактные данные
           </h3>

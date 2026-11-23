@@ -55,7 +55,7 @@ export function ThemeProvider({ children }) {
     }
     root.classList.add('theme-changing');
     root.dataset.theme = resolved;
-    const timer = window.setTimeout(() => root.classList.remove('theme-changing'), 300);
+    const timer = window.setTimeout(() => root.classList.remove('theme-changing'), 400);
     return () => {
       window.clearTimeout(timer);
       root.classList.remove('theme-changing');

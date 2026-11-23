@@ -4,7 +4,7 @@ import PageMeta from '../components/layout/PageMeta.jsx';
 import Breadcrumbs from '../components/layout/Breadcrumbs.jsx';
 import ProductCard from '../components/product/ProductCard.jsx';
 import ProductImage from '../components/product/ProductImage.jsx';
-import { getImageSrcSet, getProductGallery } from '../data/images.js';
+import { getImageSrcSet, getProductGallery, getProductImageAlt } from '../data/images.js';
 import Rating from '../components/product/Rating.jsx';
 import Icon from '../components/ui/Icon.jsx';
 import { Reveal } from '../components/ui/Reveal.jsx';
@@ -50,7 +50,7 @@ function ProductPage() {
   if (!product) {
     return (
       <>
-        <PageMeta title="Товар не найден — ShopProject" description="Товар не найден в каталоге." />
+        <PageMeta title="Товар не найден — «Стол и дело»" description="Товар не найден в каталоге." />
         <section className="section">
           <h1 className="page-hero__title">Товар не найден</h1>
           <p className="page-hero__text">
@@ -71,9 +71,6 @@ function ProductPage() {
   const related = getRelatedProducts(product, 3);
   const inStock = product.stock > 0;
   const photoIndex = activeImage < gallery.length ? activeImage : 0;
-  const photoAlt = product.id === 'aurora-desk-lamp'
-    ? ['Чёрная настольная лампа Aurora на рабочем столе', 'Чёрная настольная лампа Aurora на белом фоне'][photoIndex]
-    : product.title;
   const total = formatPrice(product.price * quantity);
   const discount = product.oldPrice
     ? Math.round(calculateDiscount(product) / product.oldPrice * 100)
@@ -110,7 +107,7 @@ function ProductPage() {
   return (
     <>
       <PageMeta
-        title={`${product.title} — ShopProject`}
+        title={`${product.title} — «Стол и дело»`}
         description={`${product.tagline}. ${product.description}`}
       />
 
@@ -120,7 +117,7 @@ function ProductPage() {
         <Reveal className="product-detail__gallery">
           <div className={`product-detail__media product-detail__media--${product.accent}`}>
             {badge && <span className={`badge ${badge.modifier}`}>{badge.label}</span>}
-            <ProductImage product={product} index={photoIndex} alt={photoAlt} sizes="(max-width: 1080px) 94vw, 560px" priority />
+            <ProductImage product={product} index={photoIndex} sizes="(max-width: 1080px) 94vw, 560px" priority />
           </div>
 
           {gallery.length > 1 && (
@@ -132,9 +129,9 @@ function ProductPage() {
                     type="button"
                     onClick={() => setActiveImage(index)}
                     aria-pressed={activeImage === index}
-                    aria-label={`Показать фото ${index + 1} из ${gallery.length}`}
+                    aria-label={`Показать фото ${index + 1} из ${gallery.length}. ${getProductImageAlt(src)}`}
                   >
-                    <img src={src} srcSet={getImageSrcSet(src)} sizes="72px" alt="" loading="lazy" />
+                    <img src={src} srcSet={getImageSrcSet(src)} sizes="72px" alt={getProductImageAlt(src)} loading="lazy" />
                   </button>
                 </li>
               ))}

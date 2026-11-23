@@ -19,8 +19,8 @@ function AboutPage() {
   return (
     <>
       <PageMeta
-        title="О бренде — ShopProject"
-        description="История ShopProject: как мы выбираем предметы для рабочего места, наши ценности, команда и этапы развития."
+        title="О бренде — «Стол и дело»"
+        description="История «Стол и дело»: как мы выбираем предметы для рабочего места, наши ценности, команда и этапы развития."
       />
 
       <Breadcrumbs current="О бренде" />
@@ -58,7 +58,7 @@ function AboutPage() {
       </Reveal>
 
       <section className="section section--surface" id="story" aria-labelledby="story-title">
-        <SectionHeading title="История ShopProject" id="story-title" />
+        <SectionHeading title="История «Стол и дело»" id="story-title" />
 
         <div className="story-layout">
           <Reveal className="story-text">
@@ -90,7 +90,7 @@ function AboutPage() {
           {ABOUT_VALUES.map((value) => (
             <Reveal as="li" className="advantage" key={value.title}>
               <span className="advantage__icon">
-                <Icon name={value.icon} size={22} />
+                <Icon name={value.icon} size={33} />
               </span>
               <h3 className="advantage__title">{value.title}</h3>
               <p className="advantage__text">{value.text}</p>
@@ -100,7 +100,7 @@ function AboutPage() {
       </section>
 
       <section className="section section--surface" id="timeline" aria-labelledby="timeline-title">
-        <SectionHeading title="Как развивался ShopProject" id="timeline-title" />
+        <SectionHeading title="Как развивался «Стол и дело»" id="timeline-title" />
 
         <ol className="timeline">
           {ABOUT_TIMELINE.map((item) => (

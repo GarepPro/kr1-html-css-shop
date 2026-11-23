@@ -1,21 +1,25 @@
 // Данные страниц «Контакты» и «Личный кабинет».
 // Демо-данные личного кабинета: вход не реализуется, только оформление интерфейса.
 
+export const SUPPORT_PHONE = {
+  icon: 'phone',
+  label: 'Телефон',
+  value: '+7 (495) 123-45-67',
+  href: 'tel:+74951234567',
+  note: 'Ежедневно с 10:00 до 20:00',
+};
+
+export const SUPPORT_EMAIL = {
+  icon: 'mail',
+  label: 'E-mail',
+  value: 'hello@shopproject.ru',
+  href: 'mailto:hello@shopproject.ru',
+  note: 'Отвечаем в течение часа',
+};
+
 export const CONTACT_CHANNELS = [
-  {
-    icon: 'phone',
-    label: 'Телефон',
-    value: '+7 (495) 123-45-67',
-    href: 'tel:+74951234567',
-    note: 'Ежедневно с 10:00 до 20:00',
-  },
-  {
-    icon: 'mail',
-    label: 'E-mail',
-    value: 'hello@shopproject.ru',
-    href: 'mailto:hello@shopproject.ru',
-    note: 'Отвечаем в течение часа',
-  },
+  SUPPORT_PHONE,
+  SUPPORT_EMAIL,
   {
     icon: 'chat',
     label: 'Чат на сайте',
@@ -24,13 +28,17 @@ export const CONTACT_CHANNELS = [
   },
 ];
 
+// Демонстрационные номера точек самовывоза.
 export const SHOWROOM_POINTS = [
   {
     id: 'showroom-moscow',
     title: 'Московский шоурум',
     address: 'Москва, Большая Новодмитровская улица, 36',
     note: 'Вход со двора, второй этаж. Можно попробовать технику и забрать заказ.',
-    hours: 'Ежедневно, 10:00–21:00',
+    hours: 'Ежедневно, 10:00–20:00',
+    phone: '+7 (495) 123-45-67',
+    phoneHref: 'tel:+74951234567',
+    callHours: 'ежедневно с 10:00 до 20:00',
   },
   {
     id: 'point-khimki',
@@ -38,6 +46,9 @@ export const SHOWROOM_POINTS = [
     address: 'Химки, Ленинградская улица, 16',
     note: 'Получение и проверка заказов.',
     hours: 'Ежедневно, 10:00–20:00',
+    phone: '+7 (495) 132-58-46',
+    phoneHref: 'tel:+74951325846',
+    callHours: 'ежедневно с 10:00 до 20:00',
   },
   {
     id: 'point-mytishchi',
@@ -45,6 +56,9 @@ export const SHOWROOM_POINTS = [
     address: 'Мытищи, Новомытищинский проспект, 26',
     note: 'Получение заказов и оформление возврата.',
     hours: 'Пн–сб, 11:00–20:00',
+    phone: '+7 (495) 953-67-23',
+    phoneHref: 'tel:+74959536723',
+    callHours: 'пн–сб с 11:00 до 20:00',
   },
 ];
 

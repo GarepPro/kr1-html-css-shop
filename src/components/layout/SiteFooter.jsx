@@ -1,27 +1,32 @@
 import { Link } from 'react-router-dom';
 import Icon from '../ui/Icon.jsx';
-import { CATEGORIES } from '../../data/catalog.js';
+import { SHOWROOM_POINTS, SUPPORT_EMAIL, SUPPORT_PHONE } from '../../data/contacts.js';
 
-// Колонки ссылок подвала: разделы сайта и категории каталога.
 const FOOTER_LINKS = [
   {
     title: 'Магазин',
     links: [
-      { to: '/catalog', label: 'Каталог' },
-      { to: '/product/aurora-desk-lamp', label: 'Лампа Aurora Desk' },
-      { to: '/product/keyboard-slim', label: 'Клавиатура Slim Keys' },
-      { to: '/cart', label: 'Корзина и заявка' },
+      { to: '/about', label: 'О бренде' },
+      { to: '/contacts', label: 'Контакты' },
+      { to: '/about#team', label: 'Команда' },
     ],
   },
   {
-    title: 'Компания',
+    title: 'Покупателям',
     links: [
-      { to: '/about', label: 'О бренде' },
-      { to: '/about#team', label: 'Команда' },
-      { to: '/contacts', label: 'Контакты' },
       { to: '/account', label: 'Личный кабинет' },
+      { to: '/catalog', label: 'Каталог' },
+      { to: '/cart', label: 'Корзина' },
+      { to: '/cart#request', label: 'Заявка' },
     ],
   },
+];
+
+const SOCIAL_NETWORKS = [
+  { icon: 'vk', label: 'ВКонтакте' },
+  { icon: 'telegram', label: 'Telegram' },
+  { icon: 'youtube', label: 'YouTube' },
+  { icon: 'instagram', label: 'Instagram' },
 ];
 
 function SiteFooter() {
@@ -32,27 +37,19 @@ function SiteFooter() {
           <div className="site-footer__brand">
             <Link className="site-footer__logo" to="/">
               <span className="site-footer__logo-mark" aria-hidden="true">
-                S
+                С
               </span>
-              ShopProject
+              Стол и дело
             </Link>
             <p className="site-footer__tagline">
               Предметы для рабочего места, которые мы выбираем и тестируем сами.
             </p>
-
-            <div className="site-footer__contacts">
-              <a className="site-footer__contact" href="tel:+74951234567">
-                <Icon name="phone" size={16} />
-                +7 (495) 123-45-67
-              </a>
-              <span className="site-footer__contact">
-                <Icon name="clock" size={16} />
-                Ежедневно с 10:00 до 20:00
-              </span>
-              <a className="site-footer__contact" href="mailto:hello@shopproject.ru">
-                <Icon name="mail" size={16} />
-                hello@shopproject.ru
-              </a>
+            <div className="site-footer__socials" role="group" aria-label="Социальные сети">
+              {SOCIAL_NETWORKS.map(({ icon, label }) => (
+                <button className="icon-button" key={icon} type="button" aria-label={label} disabled>
+                  <Icon name={icon} size={18} />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -71,23 +68,31 @@ function SiteFooter() {
             </nav>
           ))}
 
-          <nav className="site-footer__column" aria-label="Категории">
-            <h2 className="site-footer__title">Категории</h2>
-            <ul className="site-footer__list">
-              {CATEGORIES.slice(0, 4).map((category) => (
-                <li key={category.slug}>
-                  <Link className="site-footer__link" to={`/catalog?category=${category.slug}`}>
-                    {category.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <section className="site-footer__column" aria-labelledby="footer-contacts-title">
+            <h2 className="site-footer__title" id="footer-contacts-title">Контакты</h2>
+            <div className="site-footer__contacts">
+              <Link className="site-footer__contact" to="/contacts#showroom">
+                <Icon name="pin" size={16} />
+                {SHOWROOM_POINTS[0].address}
+              </Link>
+              <a className="site-footer__contact" href={SUPPORT_PHONE.href}>
+                <Icon name="phone" size={16} />
+                {SUPPORT_PHONE.value}
+              </a>
+              <span className="site-footer__contact">
+                <Icon name="clock" size={16} />
+                {SUPPORT_PHONE.note}
+              </span>
+              <a className="site-footer__contact" href={SUPPORT_EMAIL.href}>
+                <Icon name="mail" size={16} />
+                {SUPPORT_EMAIL.value}
+              </a>
+            </div>
+          </section>
         </div>
 
         <div className="site-footer__bottom">
-          <p className="site-footer__copyright">© 2026 ShopProject. Все права защищены.</p>
-          <p className="site-footer__meta">Москва, Большая Новодмитровская, 36</p>
+          <p className="site-footer__copyright">© 2026 «Стол и дело». Все права защищены.</p>
         </div>
       </div>
     </footer>

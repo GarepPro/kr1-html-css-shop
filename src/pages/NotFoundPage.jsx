@@ -6,8 +6,8 @@ function NotFoundPage() {
   return (
     <>
       <PageMeta
-        title="Страница не найдена — ShopProject"
-        description="Запрошенная страница ShopProject не найдена."
+        title="Страница не найдена — «Стол и дело»"
+        description="Запрошенная страница «Стол и дело» не найдена."
       />
 
       <section className="not-found">

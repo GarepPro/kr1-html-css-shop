@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { ProductSilhouette } from './ProductSilhouette.jsx';
-import { getImageSrcSet, getProductImage } from '../../data/images.js';
+import { getImageSrcSet, getProductImage, getProductImageAlt } from '../../data/images.js';
 
-function ProductImage({ product, index = 0, className = '', sizes, alt = product.title, priority = false }) {
+function ProductImage({ product, index = 0, className = '', sizes, priority = false }) {
   const src = getProductImage(product.id, index);
   const [failedSrc, setFailedSrc] = useState(null);
   const hasPhoto = src && failedSrc !== src;
@@ -14,7 +14,7 @@ function ProductImage({ product, index = 0, className = '', sizes, alt = product
           className="product-image"
           src={src}
           srcSet={getImageSrcSet(src)}
-          alt={alt}
+          alt={getProductImageAlt(src)}
           sizes={sizes}
           loading={priority ? 'eager' : 'lazy'}
           fetchPriority={priority ? 'high' : undefined}
@@ -24,7 +24,7 @@ function ProductImage({ product, index = 0, className = '', sizes, alt = product
       ) : (
         <>
           <ProductSilhouette category={product.category} className="product-image__fallback" />
-          {alt && <span className="visually-hidden">{alt}</span>}
+          <span className="visually-hidden">{product.title}</span>
         </>
       )}
     </span>

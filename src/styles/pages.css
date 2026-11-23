@@ -1058,6 +1058,7 @@ a.contact-card__value:hover {
 }
 
 .showroom-points { border-top: 1px solid var(--color-border); }
+.showroom-points > li { border-bottom: 1px solid var(--color-border); }
 .showroom-info { min-width: 0; }
 
 .showroom-point {
@@ -1070,7 +1071,6 @@ a.contact-card__value:hover {
   color: var(--color-text-soft);
   background: transparent;
   border: 0;
-  border-bottom: 1px solid var(--color-border);
   cursor: pointer;
 }
 
@@ -1084,6 +1084,23 @@ a.contact-card__value:hover {
 .showroom-point__body { display: grid; gap: var(--space-2xs); font-size: var(--text-sm); }
 .showroom-point__title { font-size: var(--text-md); color: var(--color-text); }
 .showroom-point__hours { color: var(--color-text); font-weight: 600; }
+
+.showroom-point__contact {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2xs);
+  padding: var(--space-sm) var(--space-md) var(--space-md)
+    calc(var(--space-md) + var(--space-sm) + 20px);
+  color: var(--color-text-soft);
+  font-size: var(--text-sm);
+}
+
+.showroom-point__contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--color-primary);
+}
 
 .visit-guide {
   display: grid;

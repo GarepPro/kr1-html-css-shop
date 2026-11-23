@@ -1,4 +1,4 @@
-import { getImageSrcSet, getProductImage } from '../../data/images.js';
+import { getImageSrcSet, getProductImage, getProductImageAlt } from '../../data/images.js';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Icon from '../ui/Icon.jsx';
@@ -146,7 +146,7 @@ export function SearchDialog({ open, onClose }) {
               >
                 <span className={`search-results__icon search-results__icon--${result.type}`}>
                   {result.type === 'product' ? (
-                    <img src={getProductImage(result.productId)} srcSet={getImageSrcSet(getProductImage(result.productId))} sizes="48px" alt="" />
+                    <img src={getProductImage(result.productId)} srcSet={getImageSrcSet(getProductImage(result.productId))} sizes="48px" alt={getProductImageAlt(getProductImage(result.productId))} />
                   ) : (
                     <Icon name={result.type === 'faq' ? 'chat' : 'grid'} size={16} />
                   )}

@@ -268,7 +268,7 @@
 
 .site-footer__top {
   display: grid;
-  grid-template-columns: 1.6fr repeat(3, 1fr);
+  grid-template-columns: 1.5fr 1fr 1fr 1.3fr;
   gap: var(--space-xl);
   padding-bottom: var(--space-2xl);
 }
@@ -305,6 +305,17 @@
   color: var(--color-muted);
 }
 
+.site-footer__socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-md);
+}
+
+.site-footer__socials .icon-button {
+  pointer-events: none;
+}
+
 .site-footer__contacts {
   display: grid;
   gap: var(--space-xs);
@@ -319,6 +330,7 @@
 }
 
 .site-footer__contact .icon {
+  flex: none;
   color: var(--color-muted);
 }
 
@@ -356,8 +368,7 @@ a.site-footer__contact:hover {
   border-top: 1px solid var(--color-border);
 }
 
-.site-footer__copyright,
-.site-footer__meta {
+.site-footer__copyright {
   margin: 0;
   font-size: var(--text-xs);
   color: var(--color-muted);

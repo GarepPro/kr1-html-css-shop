@@ -79,6 +79,25 @@ const ICONS = {
   edit: <><path d="M5 19h14" /><path d="M15 5l4 4-9 9H6v-4z" /></>,
   send: <path d="M4 12 20 4l-6 16-3-6z" />,
   clock: <><circle cx="12" cy="12" r="8" /><path d="M12 8v4l3 2" /></>,
+  vk: (
+    <path fill="currentColor" stroke="none" d="M13.1 18C6.2 18 2.3 13.3 2.1 5.5h3.5c.1 5.7 2.6 8.1 4.5 8.6V5.5h3.3v4.9c1.9-.2 3.9-2.4 4.6-4.9h3.3c-.5 3-2.7 5.2-4.3 6.1 1.6.7 4.1 2.6 5 6.4h-3.6c-.7-2.4-2.5-4.3-5-4.5V18z" />
+  ),
+  telegram: (
+    <path fill="currentColor" stroke="none" d="M21.7 4.2 18.8 20c-.2 1-1 1.2-1.8.7l-5-3.7-2.4 2.3c-.3.3-.5.5-1 .5l.4-5.1 9.3-8.4c.4-.4-.1-.6-.6-.3L6.2 13.2l-5-1.6c-1.1-.3-1.1-1.1.2-1.6l19.3-7.4c.8-.3 1.4.2 1 1.6z" />
+  ),
+  youtube: (
+    <>
+      <rect x="2.5" y="5.5" width="19" height="13" rx="3.5" />
+      <path fill="currentColor" stroke="none" d="m10 8.8 5.5 3.2-5.5 3.2z" />
+    </>
+  ),
+  instagram: (
+    <>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </>
+  ),
   gift: <><rect x="4" y="9" width="16" height="11" rx="1.5" /><path d="M4 13h16M12 9v11M9 9a2.5 2.5 0 1 1 3-2.5A2.5 2.5 0 1 1 15 9" /></>,
   info: <><circle cx="12" cy="12" r="8" /><path d="M12 11v5M12 8v.5" /></>,
   eye: <><path d="M2.5 12S6 6 12 6s9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6z" /><circle cx="12" cy="12" r="2.6" /></>,

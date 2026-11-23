@@ -19,8 +19,8 @@ function ContactsPage() {
   return (
     <>
       <PageMeta
-        title="Контакты — ShopProject"
-        description="Контакты ShopProject: телефон, e-mail, адрес шоурума в Москве, часы работы и чат с консультантом."
+        title="Контакты — «Стол и дело»"
+        description="Контакты «Стол и дело»: телефон, e-mail, адрес шоурума в Москве, часы работы и чат с консультантом."
       />
 
       <Breadcrumbs current="Контакты" />
@@ -87,6 +87,13 @@ function ContactsPage() {
                       <span className="showroom-point__hours">{point.hours}</span>
                     </span>
                   </button>
+                  <div className="showroom-point__contact">
+                    <a href={point.phoneHref} aria-label={`Позвонить: ${point.title}, ${point.phone}`}>
+                      <Icon name="phone" size={16} />
+                      {point.phone}
+                    </a>
+                    <span>Принимаем звонки {point.callHours}</span>
+                  </div>
                 </li>
               ))}
             </ul>

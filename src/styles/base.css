@@ -1,7 +1,7 @@
-/* Hallmark · v2.0.0 · editorial · built: ShopProject · redesign: polish */
+/* Hallmark · v2.0.0 · editorial · built: «Стол и дело» · redesign: polish */
 /* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V3 · category and product photography carry the identity; stepped shadows and decorative badges recede */
 /* Hallmark · waive 3 · product photos with a favorite control · The product grid uses photography and functional favorite controls over it. */
-/* Hallmark · waive 39b · showroom-point rows remain larger than 52px · ShopProject shows the full showroom address and opening hours inside each map selector button. */
+/* Hallmark · waive 39b · showroom-point rows remain larger than 52px · «Стол и дело» shows the full showroom address and opening hours inside each map selector button. */
 /* Hallmark · waive 49b · product names wrap to two lines at 320px · Catalog links keep the full product name readable on narrow screens. */
 /* Hallmark · dismissed 54 · SectionHeading components render real h2 elements that match each section aria-labelledby. */
 /* Hallmark · dropped onSuccess={handleSuccess} · OrderForm owns the visible confirmation for the demo checkout. */
@@ -197,7 +197,7 @@ html.theme-snapshot *::after {
 }
 
 ::view-transition-new(root) {
-  animation: theme-fade-in 280ms ease-in-out both;
+  animation: theme-fade-in 360ms ease-in-out both;
   mix-blend-mode: normal;
 }
 
@@ -213,7 +213,7 @@ html.theme-snapshot *::after {
   html.theme-changing *::before,
   html.theme-changing *::after {
     transition-property: color, background-color, border-color, box-shadow, fill, stroke !important;
-    transition-duration: 260ms !important;
+    transition-duration: 360ms !important;
     transition-delay: 0s !important;
     transition-timing-function: ease-in-out !important;
   }

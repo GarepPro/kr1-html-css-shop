@@ -86,8 +86,8 @@ function CatalogPage() {
   return (
     <>
       <PageMeta
-        title={`${title} — ShopProject`}
-        description="Каталог ShopProject: фильтры по категории, цене и наличию, сортировка и карточки товаров с рейтингом."
+        title={`${title} — «Стол и дело»`}
+        description="Каталог «Стол и дело»: фильтры по категории, цене и наличию, сортировка и карточки товаров с рейтингом."
       />
 
       <Breadcrumbs current={title} />

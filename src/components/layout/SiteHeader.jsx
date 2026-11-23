@@ -52,10 +52,10 @@ function SiteHeader() {
         <div className="site-header__inner">
           <Link className="site-header__logo" to="/">
             <span className="site-header__logo-mark" aria-hidden="true">
-              S
+              С
             </span>
             <span className="site-header__logo-text">
-              Shop<span>Project</span>
+              Стол <span>и дело</span>
             </span>
           </Link>
 

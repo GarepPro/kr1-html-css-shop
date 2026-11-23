@@ -2,7 +2,7 @@
   "name": "kr1-html-css-shop",
   "private": true,
   "version": "2.0.0",
-  "description": "ShopProject: интернет-магазин предметов для рабочего места. React + Vite, без UI-фреймворков",
+  "description": "«Стол и дело»: интернет-магазин предметов для рабочего места. React + Vite, без UI-фреймворков",
   "type": "module",
   "scripts": {
     "dev": "vite",
