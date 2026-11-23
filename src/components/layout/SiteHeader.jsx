@@ -157,13 +157,13 @@ function SiteHeader() {
               </li>
             ))}
             <li>
-              <NavLink className={navLinkClass} to="/cart">
-                Корзина{cartCount > 0 ? ` (${cartCount})` : ''}
+              <NavLink className={navLinkClass} to="/account">
+                Личный кабинет
               </NavLink>
             </li>
             <li>
-              <NavLink className={navLinkClass} to="/account">
-                Личный кабинет
+              <NavLink className={navLinkClass} to="/cart">
+                Корзина{cartCount > 0 ? ` (${cartCount})` : ''}
               </NavLink>
             </li>
           </ul>

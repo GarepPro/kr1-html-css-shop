@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 
 // Подписка на горячую клавишу (Ctrl/Cmd+K — поиск, Esc — закрыть).
 export function useHotkey(matches, callback) {
@@ -29,15 +29,13 @@ export const hotkeys = {
 
 // Блокировка прокрутки страницы, пока открыто модальное окно/панель.
 export function useScrollLock(active) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!active) return undefined;
 
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    const root = document.documentElement;
+    root.classList.add('scroll-locked');
 
-    return () => {
-      document.body.style.overflow = previous;
-    };
+    return () => root.classList.remove('scroll-locked');
   }, [active]);
 }
 
